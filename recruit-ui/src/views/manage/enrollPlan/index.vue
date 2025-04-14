@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="计划ID" prop="planId">
-        <el-input
-          v-model="queryParams.planId"
-          placeholder="请输入计划ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="计划ID" prop="planId">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.planId"-->
+<!--          placeholder="请输入计划ID"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="计划年度" prop="planYear">
         <el-input
           v-model="queryParams.planYear"
@@ -57,14 +57,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="招生人数" prop="planNum">
-        <el-input
-          v-model="queryParams.planNum"
-          placeholder="请输入招生人数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="招生人数" prop="planNum">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.planNum"-->
+<!--          placeholder="请输入招生人数"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
       <el-form-item label="学费" prop="tuitionFee">
         <el-input
           v-model="queryParams.tuitionFee"
@@ -92,25 +92,25 @@
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="更新者" prop="updateBy">
-        <el-input
-          v-model="queryParams.updateBy"
-          placeholder="请输入更新者"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="更新时间">
-        <el-date-picker
-          v-model="daterangeUpdateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
+<!--      <el-form-item label="更新者" prop="updateBy">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.updateBy"-->
+<!--          placeholder="请输入更新者"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
+<!--      <el-form-item label="更新时间">-->
+<!--        <el-date-picker-->
+<!--          v-model="daterangeUpdateTime"-->
+<!--          style="width: 240px"-->
+<!--          value-format="yyyy-MM-dd"-->
+<!--          type="daterange"-->
+<!--          range-separator="-"-->
+<!--          start-placeholder="开始日期"-->
+<!--          end-placeholder="结束日期"-->
+<!--        ></el-date-picker>-->
+<!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -169,7 +169,7 @@
         <el-table-column label="计划年度" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible" prop="planYear" />
         <el-table-column label="专业代码" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible" prop="spId" />
         <el-table-column label="专业名称" :show-overflow-tooltip="true" align="center" v-if="columns[3].visible" prop="spName" />
-        <el-table-column label="系部id" :show-overflow-tooltip="true" align="center" v-if="columns[4].visible" prop="stuDeptId" />
+        <el-table-column label="系部ID" :show-overflow-tooltip="true" align="center" v-if="columns[4].visible" prop="stuDeptId" />
         <el-table-column label="系部名称" :show-overflow-tooltip="true" align="center" v-if="columns[5].visible" prop="stuDeptName" />
         <el-table-column label="学制" :show-overflow-tooltip="true" align="center" v-if="columns[6].visible" prop="spLength" />
         <el-table-column label="科类ID" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible" prop="subjectSortId" />
@@ -224,7 +224,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="计划年度" prop="planYear">
-          <el-input v-model="form.planYear" placeholder="请输入计划年度" />
+          <el-input-number :min="0" v-model="form.planYear" placeholder="请输入计划年度" />
         </el-form-item>
         <el-form-item label="专业代码" prop="spId">
           <el-input v-model="form.spId" placeholder="请输入专业代码" />
@@ -239,7 +239,7 @@
           <el-input v-model="form.stuDeptName" placeholder="请输入系部名称" />
         </el-form-item>
         <el-form-item label="学制" prop="spLength">
-          <el-input v-model="form.spLength" placeholder="请输入学制" />
+          <el-input-number :min="0" :max="10" v-model="form.spLength" placeholder="请输入学制" />
         </el-form-item>
         <el-form-item label="科类ID" prop="subjectSortId">
           <el-input v-model="form.subjectSortId" placeholder="请输入科类ID" />
@@ -257,10 +257,10 @@
           <el-input v-model="form.provinceNameShort" placeholder="请输入省份简称" />
         </el-form-item>
         <el-form-item label="招生人数" prop="planNum">
-          <el-input v-model="form.planNum" placeholder="请输入招生人数" />
+          <el-input-number :min="0" v-model="form.planNum" placeholder="请输入招生人数" />
         </el-form-item>
         <el-form-item label="学费" prop="tuitionFee">
-          <el-input v-model="form.tuitionFee" placeholder="请输入学费" />
+          <el-input-number :min="0" :precision="2" v-model="form.tuitionFee" placeholder="请输入学费" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -283,25 +283,25 @@ export default {
     return {
       //表格展示列
       columns: [
-        { key: 0, label: '计划ID', visible: true },
+        { key: 0, label: '计划ID', visible: false },
           { key: 1, label: '计划年度', visible: true },
           { key: 2, label: '专业代码', visible: true },
           { key: 3, label: '专业名称', visible: true },
-          { key: 4, label: '系部id', visible: true },
+          { key: 4, label: '系部ID', visible: false },
           { key: 5, label: '系部名称', visible: true },
           { key: 6, label: '学制', visible: true },
-          { key: 7, label: '科类ID', visible: true },
+          { key: 7, label: '科类ID', visible: false },
           { key: 8, label: '科类名称', visible: true },
           { key: 9, label: '省份编码', visible: true },
           { key: 10, label: '省份名称', visible: true },
-          { key: 11, label: '省份简称', visible: true },
+          { key: 11, label: '省份简称', visible: false },
           { key: 12, label: '招生人数', visible: true },
           { key: 13, label: '学费', visible: true },
-          { key: 14, label: '创建者', visible: true },
-          { key: 15, label: '创建时间', visible: true },
-          { key: 16, label: '更新者', visible: true },
-          { key: 17, label: '更新时间', visible: true },
-          { key: 18, label: '备注', visible: true },
+          { key: 14, label: '创建者', visible: false },
+          { key: 15, label: '创建时间', visible: false },
+          { key: 16, label: '更新者', visible: false },
+          { key: 17, label: '更新时间', visible: false },
+          { key: 18, label: '备注', visible: false },
         ],
       // 遮罩层
       loading: true,
