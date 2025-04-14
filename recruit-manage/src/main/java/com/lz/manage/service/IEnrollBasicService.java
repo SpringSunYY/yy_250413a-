@@ -1,24 +1,26 @@
 package com.lz.manage.service;
 
 import java.util.List;
+
 import com.lz.manage.model.domain.EnrollBasic;
 import com.lz.manage.model.vo.enrollBasic.EnrollBasicVo;
 import com.lz.manage.model.dto.enrollBasic.EnrollBasicQuery;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 /**
  * 录取信息Service接口
- * 
+ *
  * @author ruoyi
  * @date 2025-04-14
  */
-public interface IEnrollBasicService extends IService<EnrollBasic>
-{
+public interface IEnrollBasicService extends IService<EnrollBasic> {
     //region mybatis代码
+
     /**
      * 查询录取信息
-     * 
+     *
      * @param stuEnrollId 录取信息主键
      * @return 录取信息
      */
@@ -26,7 +28,7 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
 
     /**
      * 查询录取信息列表
-     * 
+     *
      * @param enrollBasic 录取信息
      * @return 录取信息集合
      */
@@ -34,7 +36,7 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
 
     /**
      * 新增录取信息
-     * 
+     *
      * @param enrollBasic 录取信息
      * @return 结果
      */
@@ -42,7 +44,7 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
 
     /**
      * 修改录取信息
-     * 
+     *
      * @param enrollBasic 录取信息
      * @return 结果
      */
@@ -50,7 +52,7 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
 
     /**
      * 批量删除录取信息
-     * 
+     *
      * @param stuEnrollIds 需要删除的录取信息主键集合
      * @return 结果
      */
@@ -58,12 +60,13 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
 
     /**
      * 删除录取信息信息
-     * 
+     *
      * @param stuEnrollId 录取信息主键
      * @return 结果
      */
     public int deleteEnrollBasicByStuEnrollId(String stuEnrollId);
     //endregion
+
     /**
      * 获取查询条件
      *
@@ -79,4 +82,15 @@ public interface IEnrollBasicService extends IService<EnrollBasic>
      * @return EnrollBasicVO集合
      */
     List<EnrollBasicVo> convertVoList(List<EnrollBasic> enrollBasicList);
+
+    /**
+     * description: 导入录取信息
+     * author: YY
+     * method: importEnrollBasic
+     * date: 2025/4/14 22:45
+     * param:
+     * param: basicList
+     * return: java.lang.String
+     **/
+    String importEnrollBasic(List<EnrollBasic> basicList);
 }

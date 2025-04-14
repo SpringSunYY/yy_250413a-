@@ -25,14 +25,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="准考证号" prop="examTicketNum">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.examTicketNum"-->
-<!--          placeholder="请输入准考证号"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="准考证号" prop="examTicketNum">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.examTicketNum"-->
+      <!--          placeholder="请输入准考证号"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
       <el-form-item label="姓名" prop="stuName">
         <el-input
           v-model="queryParams.stuName"
@@ -57,86 +57,86 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="民族" prop="nationId">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.nationId"-->
-<!--          placeholder="请输入民族"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="政治面貌" prop="politicsId">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.politicsId"-->
-<!--          placeholder="请输入政治面貌"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="考生类别" prop="stuExamSort">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.stuExamSort"-->
-<!--          placeholder="请输入考生类别"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="家庭电话" prop="homePhone">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.homePhone"-->
-<!--          placeholder="请输入家庭电话"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="外语语种" prop="foreignLanguage">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.foreignLanguage"-->
-<!--          placeholder="请输入外语语种"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="录取专业名称" prop="enrollSpName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.enrollSpName"-->
-<!--          placeholder="请输入录取专业名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="录取学院名称" prop="enrollDeptName">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.enrollDeptName"-->
-<!--          placeholder="请输入录取学院名称"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="投档志愿" prop="enrollNum">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.enrollNum"-->
-<!--          placeholder="请输入投档志愿"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="服从调剂" prop="enrollAdjust">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.enrollAdjust"-->
-<!--          placeholder="请输入服从调剂"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="录取批次" prop="enrollBatch">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.enrollBatch"-->
-<!--          placeholder="请输入录取批次"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="民族" prop="nationId">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.nationId"-->
+      <!--          placeholder="请输入民族"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="政治面貌" prop="politicsId">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.politicsId"-->
+      <!--          placeholder="请输入政治面貌"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="考生类别" prop="stuExamSort">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.stuExamSort"-->
+      <!--          placeholder="请输入考生类别"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="家庭电话" prop="homePhone">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.homePhone"-->
+      <!--          placeholder="请输入家庭电话"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="外语语种" prop="foreignLanguage">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.foreignLanguage"-->
+      <!--          placeholder="请输入外语语种"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="录取专业名称" prop="enrollSpName">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.enrollSpName"-->
+      <!--          placeholder="请输入录取专业名称"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="录取学院名称" prop="enrollDeptName">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.enrollDeptName"-->
+      <!--          placeholder="请输入录取学院名称"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="投档志愿" prop="enrollNum">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.enrollNum"-->
+      <!--          placeholder="请输入投档志愿"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="服从调剂" prop="enrollAdjust">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.enrollAdjust"-->
+      <!--          placeholder="请输入服从调剂"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="录取批次" prop="enrollBatch">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.enrollBatch"-->
+      <!--          placeholder="请输入录取批次"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
       <el-form-item label="档案状态" prop="docStatus">
         <el-select v-model="queryParams.docStatus" placeholder="请选择档案状态" clearable>
           <el-option
@@ -147,22 +147,22 @@
           />
         </el-select>
       </el-form-item>
-<!--      <el-form-item label="学历等级" prop="eduLevel">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.eduLevel"-->
-<!--          placeholder="请输入学历等级"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="导入数据标记" prop="dataBatchFlag">-->
-<!--        <el-input-->
-<!--          v-model="queryParams.dataBatchFlag"-->
-<!--          placeholder="请输入导入数据标记"-->
-<!--          clearable-->
-<!--          @keyup.enter.native="handleQuery"-->
-<!--        />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="学历等级" prop="eduLevel">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.eduLevel"-->
+      <!--          placeholder="请输入学历等级"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="导入数据标记" prop="dataBatchFlag">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.dataBatchFlag"-->
+      <!--          placeholder="请输入导入数据标记"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -214,6 +214,16 @@
           @click="handleExport"
           v-hasPermi="['manage:enrollBasic:export']"
         >导出
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['manage:enrollBasic:import']"
+        >导入
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
@@ -618,6 +628,35 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px">
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
+        <div class="el-upload__tip" slot="tip">
+          <el-link type="info" style="font-size:12px" @click="importTemplate">下载模板</el-link>
+        </div>
+        <div class="el-upload__tip" style="color:red" slot="tip">提示：仅允许导入“xls”或“xlsx”格式文件！</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -629,6 +668,7 @@ import {
   addEnrollBasic,
   updateEnrollBasic
 } from '@/api/manage/enrollBasic'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'EnrollBasic',
@@ -743,7 +783,25 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {}
+      rules: {},
+      upload: {
+        // 是否显示弹出层（用户导入）
+        open: false,
+        // 弹出层标题（用户导入）
+        title:
+          '',
+        // 是否禁用上传
+        isUploading:
+          false,
+        // 设置上传的请求头部
+        headers:
+          {
+            Authorization: 'Bearer ' + getToken()
+          }
+        ,
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + '/manage/enrollBasic/importData'
+      }
     }
   },
   created() {
@@ -897,6 +955,31 @@ export default {
       this.download('manage/enrollBasic/export', {
         ...this.queryParams
       }, `enrollBasic_${new Date().getTime()}.xlsx`)
+    },
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = '录取信息导入'
+      this.upload.open = true
+    },
+    /** 下载模板操作 */
+    importTemplate() {
+      this.download('manage/enrollBasic/importTemplate', {}, `enrollBasic_template_${new Date().getTime()}.xlsx`)
+    },
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$alert(response.msg, '导入结果', { dangerouslyUseHTMLString: true })
+      this.getList()
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.$refs.upload.submit()
     }
   }
 }
