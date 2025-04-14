@@ -233,6 +233,11 @@
                 <artifactId>recruit-common</artifactId>
                 <version>${recruit.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.lz</groupId>
+                <artifactId>recruit-manage</artifactId>
+                <version>${recruit.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -244,6 +249,7 @@
         <module>recruit-quartz</module>
         <module>recruit-generator</module>
         <module>recruit-common</module>
+        <module>recruit-manage</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.EnrollBasicMapper">
+    
+    <resultMap type="EnrollBasic" id="EnrollBasicResult">
+        <result property="stuEnrollId"    column="stu_enroll_id"    />
+        <result property="enrollYear"    column="enroll_year"    />
+        <result property="examNum"    column="exam_num"    />
+        <result property="examTicketNum"    column="exam_ticket_num"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="subjectSort"    column="subject_sort"    />
+        <result property="subjectSortName"    column="subject_sort_name"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="provinceName"    column="province_name"    />
+        <result property="areaCode"    column="area_code"    />
+        <result property="areaName"    column="area_name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="gender"    column="gender"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="nationId"    column="nation_id"    />
+        <result property="politicsId"    column="politics_id"    />
+        <result property="stuExamSort"    column="stu_exam_sort"    />
+        <result property="middleSchool"    column="middle_school"    />
+        <result property="homePhone"    column="home_phone"    />
+        <result property="homePhoneRes"    column="home_phone_res"    />
+        <result property="homeLink"    column="home_link"    />
+        <result property="homeAreaCode"    column="home_area_code"    />
+        <result property="homeAddr"    column="home_addr"    />
+        <result property="homeZip"    column="home_zip"    />
+        <result property="stuFeature"    column="stu_feature"    />
+        <result property="stuHonor"    column="stu_honor"    />
+        <result property="foreignLanguage"    column="foreign_language"    />
+        <result property="coreChinese"    column="core_chinese"    />
+        <result property="coreMath"    column="core_math"    />
+        <result property="coreForeign"    column="core_foreign"    />
+        <result property="coreSyn"    column="core_syn"    />
+        <result property="coreSum"    column="core_sum"    />
+        <result property="coreAward"    column="core_award"    />
+        <result property="coreSpecialty"    column="core_specialty"    />
+        <result property="coreArchive"    column="core_archive"    />
+        <result property="coreSortNum"    column="core_sort_num"    />
+        <result property="enrollSpId"    column="enroll_sp_id"    />
+        <result property="enrollSpName"    column="enroll_sp_name"    />
+        <result property="enrollDeptId"    column="enroll_dept_id"    />
+        <result property="enrollDeptName"    column="enroll_dept_name"    />
+        <result property="enrollNum"    column="enroll_num"    />
+        <result property="enrollAdjust"    column="enroll_adjust"    />
+        <result property="enrollBatch"    column="enroll_batch"    />
+        <result property="docStatus"    column="doc_status"    />
+        <result property="eduLevel"    column="edu_level"    />
+        <result property="applySp1Id"    column="apply_sp1_id"    />
+        <result property="applySp1Name"    column="apply_sp1_name"    />
+        <result property="applySp2Id"    column="apply_sp2_id"    />
+        <result property="applySp2Name"    column="apply_sp2_name"    />
+        <result property="applySp3Id"    column="apply_sp3_id"    />
+        <result property="applySp3Name"    column="apply_sp3_name"    />
+        <result property="applySp4Id"    column="apply_sp4_id"    />
+        <result property="applySp4Name"    column="apply_sp4_name"    />
+        <result property="applySp5Id"    column="apply_sp5_id"    />
+        <result property="applySp5Name"    column="apply_sp5_name"    />
+        <result property="applySp6Id"    column="apply_sp6_id"    />
+        <result property="applySp6Name"    column="apply_sp6_name"    />
+        <result property="enrollRemarks"    column="enroll_remarks"    />
+        <result property="dataBatchFlag"    column="data_batch_flag"    />
+    </resultMap>
+
+    <sql id="selectEnrollBasicVo">
+        select stu_enroll_id, enroll_year, exam_num, exam_ticket_num, stu_name, subject_sort, subject_sort_name, province_code, province_name, area_code, area_name, id_card, gender, birth_date, nation_id, politics_id, stu_exam_sort, middle_school, home_phone, home_phone_res, home_link, home_area_code, home_addr, home_zip, stu_feature, stu_honor, foreign_language, core_chinese, core_math, core_foreign, core_syn, core_sum, core_award, core_specialty, core_archive, core_sort_num, enroll_sp_id, enroll_sp_name, enroll_dept_id, enroll_dept_name, enroll_num, enroll_adjust, enroll_batch, doc_status, edu_level, apply_sp1_id, apply_sp1_name, apply_sp2_id, apply_sp2_name, apply_sp3_id, apply_sp3_name, apply_sp4_id, apply_sp4_name, apply_sp5_id, apply_sp5_name, apply_sp6_id, apply_sp6_name, enroll_remarks, data_batch_flag from stu_enroll_basic
+    </sql>
+
+    <select id="selectEnrollBasicList" parameterType="EnrollBasic" resultMap="EnrollBasicResult">
+        <include refid="selectEnrollBasicVo"/>
+        <where>  
+            <if test="stuEnrollId != null  and stuEnrollId != ''"> and stu_enroll_id = #{stuEnrollId}</if>
+            <if test="enrollYear != null  and enrollYear != ''"> and enroll_year = #{enrollYear}</if>
+            <if test="examNum != null  and examNum != ''"> and exam_num = #{examNum}</if>
+            <if test="examTicketNum != null  and examTicketNum != ''"> and exam_ticket_num = #{examTicketNum}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="provinceName != null  and provinceName != ''"> and province_name like concat('%', #{provinceName}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card = #{idCard}</if>
+            <if test="nationId != null  and nationId != ''"> and nation_id = #{nationId}</if>
+            <if test="politicsId != null  and politicsId != ''"> and politics_id = #{politicsId}</if>
+            <if test="stuExamSort != null  and stuExamSort != ''"> and stu_exam_sort = #{stuExamSort}</if>
+            <if test="homePhone != null  and homePhone != ''"> and home_phone = #{homePhone}</if>
+            <if test="foreignLanguage != null  and foreignLanguage != ''"> and foreign_language = #{foreignLanguage}</if>
+            <if test="enrollSpName != null  and enrollSpName != ''"> and enroll_sp_name like concat('%', #{enrollSpName}, '%')</if>
+            <if test="enrollDeptName != null  and enrollDeptName != ''"> and enroll_dept_name like concat('%', #{enrollDeptName}, '%')</if>
+            <if test="enrollNum != null  and enrollNum != ''"> and enroll_num = #{enrollNum}</if>
+            <if test="enrollAdjust != null  and enrollAdjust != ''"> and enroll_adjust = #{enrollAdjust}</if>
+            <if test="enrollBatch != null  and enrollBatch != ''"> and enroll_batch = #{enrollBatch}</if>
+            <if test="docStatus != null  and docStatus != ''"> and doc_status = #{docStatus}</if>
+            <if test="eduLevel != null  and eduLevel != ''"> and edu_level = #{eduLevel}</if>
+            <if test="dataBatchFlag != null  and dataBatchFlag != ''"> and data_batch_flag = #{dataBatchFlag}</if>
+        </where>
+    </select>
+    
+    <select id="selectEnrollBasicByStuEnrollId" parameterType="String" resultMap="EnrollBasicResult">
+        <include refid="selectEnrollBasicVo"/>
+        where stu_enroll_id = #{stuEnrollId}
+    </select>
+
+    <insert id="insertEnrollBasic" parameterType="EnrollBasic">
+        insert into stu_enroll_basic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">stu_enroll_id,</if>
+            <if test="enrollYear != null">enroll_year,</if>
+            <if test="examNum != null">exam_num,</if>
+            <if test="examTicketNum != null">exam_ticket_num,</if>
+            <if test="stuName != null">stu_name,</if>
+            <if test="subjectSort != null">subject_sort,</if>
+            <if test="subjectSortName != null">subject_sort_name,</if>
+            <if test="provinceCode != null">province_code,</if>
+            <if test="provinceName != null">province_name,</if>
+            <if test="areaCode != null">area_code,</if>
+            <if test="areaName != null">area_name,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="gender != null">gender,</if>
+            <if test="birthDate != null">birth_date,</if>
+            <if test="nationId != null">nation_id,</if>
+            <if test="politicsId != null">politics_id,</if>
+            <if test="stuExamSort != null">stu_exam_sort,</if>
+            <if test="middleSchool != null">middle_school,</if>
+            <if test="homePhone != null">home_phone,</if>
+            <if test="homePhoneRes != null">home_phone_res,</if>
+            <if test="homeLink != null">home_link,</if>
+            <if test="homeAreaCode != null">home_area_code,</if>
+            <if test="homeAddr != null">home_addr,</if>
+            <if test="homeZip != null">home_zip,</if>
+            <if test="stuFeature != null">stu_feature,</if>
+            <if test="stuHonor != null">stu_honor,</if>
+            <if test="foreignLanguage != null">foreign_language,</if>
+            <if test="coreChinese != null">core_chinese,</if>
+            <if test="coreMath != null">core_math,</if>
+            <if test="coreForeign != null">core_foreign,</if>
+            <if test="coreSyn != null">core_syn,</if>
+            <if test="coreSum != null">core_sum,</if>
+            <if test="coreAward != null">core_award,</if>
+            <if test="coreSpecialty != null">core_specialty,</if>
+            <if test="coreArchive != null">core_archive,</if>
+            <if test="coreSortNum != null">core_sort_num,</if>
+            <if test="enrollSpId != null">enroll_sp_id,</if>
+            <if test="enrollSpName != null">enroll_sp_name,</if>
+            <if test="enrollDeptId != null">enroll_dept_id,</if>
+            <if test="enrollDeptName != null">enroll_dept_name,</if>
+            <if test="enrollNum != null">enroll_num,</if>
+            <if test="enrollAdjust != null">enroll_adjust,</if>
+            <if test="enrollBatch != null">enroll_batch,</if>
+            <if test="docStatus != null">doc_status,</if>
+            <if test="eduLevel != null">edu_level,</if>
+            <if test="applySp1Id != null">apply_sp1_id,</if>
+            <if test="applySp1Name != null">apply_sp1_name,</if>
+            <if test="applySp2Id != null">apply_sp2_id,</if>
+            <if test="applySp2Name != null">apply_sp2_name,</if>
+            <if test="applySp3Id != null">apply_sp3_id,</if>
+            <if test="applySp3Name != null">apply_sp3_name,</if>
+            <if test="applySp4Id != null">apply_sp4_id,</if>
+            <if test="applySp4Name != null">apply_sp4_name,</if>
+            <if test="applySp5Id != null">apply_sp5_id,</if>
+            <if test="applySp5Name != null">apply_sp5_name,</if>
+            <if test="applySp6Id != null">apply_sp6_id,</if>
+            <if test="applySp6Name != null">apply_sp6_name,</if>
+            <if test="enrollRemarks != null">enroll_remarks,</if>
+            <if test="dataBatchFlag != null">data_batch_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">#{stuEnrollId},</if>
+            <if test="enrollYear != null">#{enrollYear},</if>
+            <if test="examNum != null">#{examNum},</if>
+            <if test="examTicketNum != null">#{examTicketNum},</if>
+            <if test="stuName != null">#{stuName},</if>
+            <if test="subjectSort != null">#{subjectSort},</if>
+            <if test="subjectSortName != null">#{subjectSortName},</if>
+            <if test="provinceCode != null">#{provinceCode},</if>
+            <if test="provinceName != null">#{provinceName},</if>
+            <if test="areaCode != null">#{areaCode},</if>
+            <if test="areaName != null">#{areaName},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="birthDate != null">#{birthDate},</if>
+            <if test="nationId != null">#{nationId},</if>
+            <if test="politicsId != null">#{politicsId},</if>
+            <if test="stuExamSort != null">#{stuExamSort},</if>
+            <if test="middleSchool != null">#{middleSchool},</if>
+            <if test="homePhone != null">#{homePhone},</if>
+            <if test="homePhoneRes != null">#{homePhoneRes},</if>
+            <if test="homeLink != null">#{homeLink},</if>
+            <if test="homeAreaCode != null">#{homeAreaCode},</if>
+            <if test="homeAddr != null">#{homeAddr},</if>
+            <if test="homeZip != null">#{homeZip},</if>
+            <if test="stuFeature != null">#{stuFeature},</if>
+            <if test="stuHonor != null">#{stuHonor},</if>
+            <if test="foreignLanguage != null">#{foreignLanguage},</if>
+            <if test="coreChinese != null">#{coreChinese},</if>
+            <if test="coreMath != null">#{coreMath},</if>
+            <if test="coreForeign != null">#{coreForeign},</if>
+            <if test="coreSyn != null">#{coreSyn},</if>
+            <if test="coreSum != null">#{coreSum},</if>
+            <if test="coreAward != null">#{coreAward},</if>
+            <if test="coreSpecialty != null">#{coreSpecialty},</if>
+            <if test="coreArchive != null">#{coreArchive},</if>
+            <if test="coreSortNum != null">#{coreSortNum},</if>
+            <if test="enrollSpId != null">#{enrollSpId},</if>
+            <if test="enrollSpName != null">#{enrollSpName},</if>
+            <if test="enrollDeptId != null">#{enrollDeptId},</if>
+            <if test="enrollDeptName != null">#{enrollDeptName},</if>
+            <if test="enrollNum != null">#{enrollNum},</if>
+            <if test="enrollAdjust != null">#{enrollAdjust},</if>
+            <if test="enrollBatch != null">#{enrollBatch},</if>
+            <if test="docStatus != null">#{docStatus},</if>
+            <if test="eduLevel != null">#{eduLevel},</if>
+            <if test="applySp1Id != null">#{applySp1Id},</if>
+            <if test="applySp1Name != null">#{applySp1Name},</if>
+            <if test="applySp2Id != null">#{applySp2Id},</if>
+            <if test="applySp2Name != null">#{applySp2Name},</if>
+            <if test="applySp3Id != null">#{applySp3Id},</if>
+            <if test="applySp3Name != null">#{applySp3Name},</if>
+            <if test="applySp4Id != null">#{applySp4Id},</if>
+            <if test="applySp4Name != null">#{applySp4Name},</if>
+            <if test="applySp5Id != null">#{applySp5Id},</if>
+            <if test="applySp5Name != null">#{applySp5Name},</if>
+            <if test="applySp6Id != null">#{applySp6Id},</if>
+            <if test="applySp6Name != null">#{applySp6Name},</if>
+            <if test="enrollRemarks != null">#{enrollRemarks},</if>
+            <if test="dataBatchFlag != null">#{dataBatchFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEnrollBasic" parameterType="EnrollBasic">
+        update stu_enroll_basic
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="enrollYear != null">enroll_year = #{enrollYear},</if>
+            <if test="examNum != null">exam_num = #{examNum},</if>
+            <if test="examTicketNum != null">exam_ticket_num = #{examTicketNum},</if>
+            <if test="stuName != null">stu_name = #{stuName},</if>
+            <if test="subjectSort != null">subject_sort = #{subjectSort},</if>
+            <if test="subjectSortName != null">subject_sort_name = #{subjectSortName},</if>
+            <if test="provinceCode != null">province_code = #{provinceCode},</if>
+            <if test="provinceName != null">province_name = #{provinceName},</if>
+            <if test="areaCode != null">area_code = #{areaCode},</if>
+            <if test="areaName != null">area_name = #{areaName},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthDate != null">birth_date = #{birthDate},</if>
+            <if test="nationId != null">nation_id = #{nationId},</if>
+            <if test="politicsId != null">politics_id = #{politicsId},</if>
+            <if test="stuExamSort != null">stu_exam_sort = #{stuExamSort},</if>
+            <if test="middleSchool != null">middle_school = #{middleSchool},</if>
+            <if test="homePhone != null">home_phone = #{homePhone},</if>
+            <if test="homePhoneRes != null">home_phone_res = #{homePhoneRes},</if>
+            <if test="homeLink != null">home_link = #{homeLink},</if>
+            <if test="homeAreaCode != null">home_area_code = #{homeAreaCode},</if>
+            <if test="homeAddr != null">home_addr = #{homeAddr},</if>
+            <if test="homeZip != null">home_zip = #{homeZip},</if>
+            <if test="stuFeature != null">stu_feature = #{stuFeature},</if>
+            <if test="stuHonor != null">stu_honor = #{stuHonor},</if>
+            <if test="foreignLanguage != null">foreign_language = #{foreignLanguage},</if>
+            <if test="coreChinese != null">core_chinese = #{coreChinese},</if>
+            <if test="coreMath != null">core_math = #{coreMath},</if>
+            <if test="coreForeign != null">core_foreign = #{coreForeign},</if>
+            <if test="coreSyn != null">core_syn = #{coreSyn},</if>
+            <if test="coreSum != null">core_sum = #{coreSum},</if>
+            <if test="coreAward != null">core_award = #{coreAward},</if>
+            <if test="coreSpecialty != null">core_specialty = #{coreSpecialty},</if>
+            <if test="coreArchive != null">core_archive = #{coreArchive},</if>
+            <if test="coreSortNum != null">core_sort_num = #{coreSortNum},</if>
+            <if test="enrollSpId != null">enroll_sp_id = #{enrollSpId},</if>
+            <if test="enrollSpName != null">enroll_sp_name = #{enrollSpName},</if>
+            <if test="enrollDeptId != null">enroll_dept_id = #{enrollDeptId},</if>
+            <if test="enrollDeptName != null">enroll_dept_name = #{enrollDeptName},</if>
+            <if test="enrollNum != null">enroll_num = #{enrollNum},</if>
+            <if test="enrollAdjust != null">enroll_adjust = #{enrollAdjust},</if>
+            <if test="enrollBatch != null">enroll_batch = #{enrollBatch},</if>
+            <if test="docStatus != null">doc_status = #{docStatus},</if>
+            <if test="eduLevel != null">edu_level = #{eduLevel},</if>
+            <if test="applySp1Id != null">apply_sp1_id = #{applySp1Id},</if>
+            <if test="applySp1Name != null">apply_sp1_name = #{applySp1Name},</if>
+            <if test="applySp2Id != null">apply_sp2_id = #{applySp2Id},</if>
+            <if test="applySp2Name != null">apply_sp2_name = #{applySp2Name},</if>
+            <if test="applySp3Id != null">apply_sp3_id = #{applySp3Id},</if>
+            <if test="applySp3Name != null">apply_sp3_name = #{applySp3Name},</if>
+            <if test="applySp4Id != null">apply_sp4_id = #{applySp4Id},</if>
+            <if test="applySp4Name != null">apply_sp4_name = #{applySp4Name},</if>
+            <if test="applySp5Id != null">apply_sp5_id = #{applySp5Id},</if>
+            <if test="applySp5Name != null">apply_sp5_name = #{applySp5Name},</if>
+            <if test="applySp6Id != null">apply_sp6_id = #{applySp6Id},</if>
+            <if test="applySp6Name != null">apply_sp6_name = #{applySp6Name},</if>
+            <if test="enrollRemarks != null">enroll_remarks = #{enrollRemarks},</if>
+            <if test="dataBatchFlag != null">data_batch_flag = #{dataBatchFlag},</if>
+        </trim>
+        where stu_enroll_id = #{stuEnrollId}
+    </update>
+
+    <delete id="deleteEnrollBasicByStuEnrollId" parameterType="String">
+        delete from stu_enroll_basic where stu_enroll_id = #{stuEnrollId}
+    </delete>
+
+    <delete id="deleteEnrollBasicByStuEnrollIds" parameterType="String">
+        delete from stu_enroll_basic where stu_enroll_id in 
+        <foreach item="stuEnrollId" collection="array" open="(" separator="," close=")">
+            #{stuEnrollId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.EnrollContactMapper">
+
+    <resultMap type="EnrollContact" id="EnrollContactResult">
+        <result property="stuEnrollId" column="stu_enroll_id"/>
+        <result property="taskUserId" column="task_user_id"/>
+        <result property="taskUserName" column="task_user_name"/>
+        <result property="taskUserExecute" column="task_user_execute"/>
+        <result property="taskLock" column="task_lock"/>
+        <result property="contactId" column="contact_id"/>
+        <result property="contactStartTime" column="contact_start_time"/>
+        <result property="contactEndTime" column="contact_end_time"/>
+        <result property="answerPeopleName" column="answer_people_name"/>
+        <result property="answerPeopleRelation" column="answer_people_relation"/>
+        <result property="answerPeopleRemark" column="answer_people_remark"/>
+        <result property="replyContent" column="reply_content"/>
+        <result property="replyContentRemark" column="reply_content_remark"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileSuffix" column="file_suffix"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectEnrollContactVo">
+        select stu_enroll_id,
+               task_user_id,
+               task_user_name,
+               task_user_execute,
+               task_lock,
+               contact_id,
+               contact_start_time,
+               contact_end_time,
+               answer_people_name,
+               answer_people_relation,
+               answer_people_remark,
+               reply_content,
+               reply_content_remark,
+               file_name,
+               file_suffix,
+               file_url,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from stu_enroll_contact
+    </sql>
+
+    <select id="selectEnrollContactList" parameterType="EnrollContact" resultMap="EnrollContactResult">
+        <include refid="selectEnrollContactVo"/>
+        <where>
+            <if test="stuEnrollId != null  and stuEnrollId != ''">and stu_enroll_id = #{stuEnrollId}</if>
+            <if test="taskUserName != null  and taskUserName != ''">and task_user_name like concat('%', #{taskUserName},
+                '%')
+            </if>
+            <if test="taskUserExecute != null  and taskUserExecute != ''">and task_user_execute = #{taskUserExecute}
+            </if>
+            <if test="taskLock != null  and taskLock != ''">and task_lock = #{taskLock}</if>
+            <if test="answerPeopleName != null  and answerPeopleName != ''">and answer_people_name like concat('%',
+                #{answerPeopleName}, '%')
+            </if>
+            <if test="answerPeopleRelation != null  and answerPeopleRelation != ''">and answer_people_relation =
+                #{answerPeopleRelation}
+            </if>
+            <if test="fileUrl != null  and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="createBy != null  and createBy != ''">and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and DATE_FORMAT(update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectEnrollContactByStuEnrollId" parameterType="String" resultMap="EnrollContactResult">
+        <include refid="selectEnrollContactVo"/>
+        where contact_id = #{contactId}
+    </select>
+
+    <insert id="insertEnrollContact" parameterType="EnrollContact">
+        insert into stu_enroll_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">stu_enroll_id,</if>
+            <if test="taskUserId != null">task_user_id,</if>
+            <if test="taskUserName != null">task_user_name,</if>
+            <if test="taskUserExecute != null">task_user_execute,</if>
+            <if test="taskLock != null">task_lock,</if>
+            <if test="contactId != null">contact_id,</if>
+            <if test="contactStartTime != null">contact_start_time,</if>
+            <if test="contactEndTime != null">contact_end_time,</if>
+            <if test="answerPeopleName != null">answer_people_name,</if>
+            <if test="answerPeopleRelation != null">answer_people_relation,</if>
+            <if test="answerPeopleRemark != null">answer_people_remark,</if>
+            <if test="replyContent != null">reply_content,</if>
+            <if test="replyContentRemark != null">reply_content_remark,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="fileSuffix != null">file_suffix,</if>
+            <if test="fileUrl != null">file_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">#{stuEnrollId},</if>
+            <if test="taskUserId != null">#{taskUserId},</if>
+            <if test="taskUserName != null">#{taskUserName},</if>
+            <if test="taskUserExecute != null">#{taskUserExecute},</if>
+            <if test="taskLock != null">#{taskLock},</if>
+            <if test="contactId != null">#{contactId},</if>
+            <if test="contactStartTime != null">#{contactStartTime},</if>
+            <if test="contactEndTime != null">#{contactEndTime},</if>
+            <if test="answerPeopleName != null">#{answerPeopleName},</if>
+            <if test="answerPeopleRelation != null">#{answerPeopleRelation},</if>
+            <if test="answerPeopleRemark != null">#{answerPeopleRemark},</if>
+            <if test="replyContent != null">#{replyContent},</if>
+            <if test="replyContentRemark != null">#{replyContentRemark},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="fileSuffix != null">#{fileSuffix},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEnrollContact" parameterType="EnrollContact">
+        update stu_enroll_contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskUserId != null">task_user_id = #{taskUserId},</if>
+            <if test="taskUserName != null">task_user_name = #{taskUserName},</if>
+            <if test="taskUserExecute != null">task_user_execute = #{taskUserExecute},</if>
+            <if test="taskLock != null">task_lock = #{taskLock},</if>
+            <if test="contactId != null">contact_id = #{contactId},</if>
+            <if test="contactStartTime != null">contact_start_time = #{contactStartTime},</if>
+            <if test="contactEndTime != null">contact_end_time = #{contactEndTime},</if>
+            <if test="answerPeopleName != null">answer_people_name = #{answerPeopleName},</if>
+            <if test="answerPeopleRelation != null">answer_people_relation = #{answerPeopleRelation},</if>
+            <if test="answerPeopleRemark != null">answer_people_remark = #{answerPeopleRemark},</if>
+            <if test="replyContent != null">reply_content = #{replyContent},</if>
+            <if test="replyContentRemark != null">reply_content_remark = #{replyContentRemark},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="fileSuffix != null">file_suffix = #{fileSuffix},</if>
+            <if test="fileUrl != null">file_url = #{fileUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where contact_id = #{contactId}
+    </update>
+
+    <delete id="deleteEnrollContactByStuEnrollId" parameterType="String">
+        delete
+        from stu_enroll_contact
+        where contact_id = #{contactId}
+    </delete>
+
+    <delete id="deleteEnrollContactByStuEnrollIds" parameterType="String">
+        delete from stu_enroll_contact where contact_id in
+        <foreach item="stuEnrollId" collection="array" open="(" separator="," close=")">
+            #{stuEnrollId}
+        </foreach>
+    </delete>
+</mapper>

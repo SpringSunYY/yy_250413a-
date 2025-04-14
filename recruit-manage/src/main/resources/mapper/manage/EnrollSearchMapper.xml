@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.EnrollSearchMapper">
+    
+    <resultMap type="EnrollSearch" id="EnrollSearchResult">
+        <result property="stuEnrollId"    column="stu_enroll_id"    />
+        <result property="stuNo"    column="stu_no"    />
+        <result property="classId"    column="class_id"    />
+        <result property="dormId"    column="dorm_id"    />
+        <result property="classTeacher"    column="class_teacher"    />
+        <result property="classTeacherContact"    column="class_teacher_contact"    />
+        <result property="classQq"    column="class_qq"    />
+        <result property="searchRemarks"    column="search_remarks"    />
+    </resultMap>
+
+    <sql id="selectEnrollSearchVo">
+        select stu_enroll_id, stu_no, class_id, dorm_id, class_teacher, class_teacher_contact, class_qq, search_remarks from stu_enroll_search
+    </sql>
+
+    <select id="selectEnrollSearchList" parameterType="EnrollSearch" resultMap="EnrollSearchResult">
+        <include refid="selectEnrollSearchVo"/>
+        <where>  
+            <if test="stuEnrollId != null  and stuEnrollId != ''"> and stu_enroll_id = #{stuEnrollId}</if>
+            <if test="stuNo != null  and stuNo != ''"> and stu_no = #{stuNo}</if>
+            <if test="classId != null  and classId != ''"> and class_id = #{classId}</if>
+            <if test="dormId != null  and dormId != ''"> and dorm_id = #{dormId}</if>
+            <if test="classTeacher != null  and classTeacher != ''"> and class_teacher = #{classTeacher}</if>
+            <if test="classTeacherContact != null  and classTeacherContact != ''"> and class_teacher_contact = #{classTeacherContact}</if>
+            <if test="classQq != null  and classQq != ''"> and class_qq = #{classQq}</if>
+        </where>
+    </select>
+    
+    <select id="selectEnrollSearchByStuEnrollId" parameterType="String" resultMap="EnrollSearchResult">
+        <include refid="selectEnrollSearchVo"/>
+        where stu_enroll_id = #{stuEnrollId}
+    </select>
+
+    <insert id="insertEnrollSearch" parameterType="EnrollSearch">
+        insert into stu_enroll_search
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">stu_enroll_id,</if>
+            <if test="stuNo != null">stu_no,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="dormId != null">dorm_id,</if>
+            <if test="classTeacher != null">class_teacher,</if>
+            <if test="classTeacherContact != null">class_teacher_contact,</if>
+            <if test="classQq != null">class_qq,</if>
+            <if test="searchRemarks != null">search_remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuEnrollId != null">#{stuEnrollId},</if>
+            <if test="stuNo != null">#{stuNo},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="dormId != null">#{dormId},</if>
+            <if test="classTeacher != null">#{classTeacher},</if>
+            <if test="classTeacherContact != null">#{classTeacherContact},</if>
+            <if test="classQq != null">#{classQq},</if>
+            <if test="searchRemarks != null">#{searchRemarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEnrollSearch" parameterType="EnrollSearch">
+        update stu_enroll_search
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuNo != null">stu_no = #{stuNo},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="dormId != null">dorm_id = #{dormId},</if>
+            <if test="classTeacher != null">class_teacher = #{classTeacher},</if>
+            <if test="classTeacherContact != null">class_teacher_contact = #{classTeacherContact},</if>
+            <if test="classQq != null">class_qq = #{classQq},</if>
+            <if test="searchRemarks != null">search_remarks = #{searchRemarks},</if>
+        </trim>
+        where stu_enroll_id = #{stuEnrollId}
+    </update>
+
+    <delete id="deleteEnrollSearchByStuEnrollId" parameterType="String">
+        delete from stu_enroll_search where stu_enroll_id = #{stuEnrollId}
+    </delete>
+
+    <delete id="deleteEnrollSearchByStuEnrollIds" parameterType="String">
+        delete from stu_enroll_search where stu_enroll_id in 
+        <foreach item="stuEnrollId" collection="array" open="(" separator="," close=")">
+            #{stuEnrollId}
+        </foreach>
+    </delete>
+</mapper>

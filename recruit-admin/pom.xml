@@ -60,6 +60,10 @@
             <groupId>com.lz</groupId>
             <artifactId>recruit-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.lz</groupId>
+            <artifactId>recruit-manage</artifactId>
+        </dependency>
 
     </dependencies>
 

@@ -1,0 +1,144 @@
+package com.lz.manage.service.impl;
+
+import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import com.lz.common.utils.StringUtils;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lz.manage.mapper.EnrollSearchMapper;
+import com.lz.manage.model.domain.EnrollSearch;
+import com.lz.manage.service.IEnrollSearchService;
+import com.lz.manage.model.dto.enrollSearch.EnrollSearchQuery;
+import com.lz.manage.model.vo.enrollSearch.EnrollSearchVo;
+
+/**
+ * 考生查询Service业务层处理
+ * 
+ * @author YY
+ * @date 2025-04-14
+ */
+@Service
+public class EnrollSearchServiceImpl extends ServiceImpl<EnrollSearchMapper, EnrollSearch> implements IEnrollSearchService
+{
+    @Resource
+    private EnrollSearchMapper enrollSearchMapper;
+
+    //region mybatis代码
+    /**
+     * 查询考生查询
+     * 
+     * @param stuEnrollId 考生查询主键
+     * @return 考生查询
+     */
+    @Override
+    public EnrollSearch selectEnrollSearchByStuEnrollId(String stuEnrollId)
+    {
+        return enrollSearchMapper.selectEnrollSearchByStuEnrollId(stuEnrollId);
+    }
+
+    /**
+     * 查询考生查询列表
+     * 
+     * @param enrollSearch 考生查询
+     * @return 考生查询
+     */
+    @Override
+    public List<EnrollSearch> selectEnrollSearchList(EnrollSearch enrollSearch)
+    {
+        return enrollSearchMapper.selectEnrollSearchList(enrollSearch);
+    }
+
+    /**
+     * 新增考生查询
+     * 
+     * @param enrollSearch 考生查询
+     * @return 结果
+     */
+    @Override
+    public int insertEnrollSearch(EnrollSearch enrollSearch)
+    {
+        return enrollSearchMapper.insertEnrollSearch(enrollSearch);
+    }
+
+    /**
+     * 修改考生查询
+     * 
+     * @param enrollSearch 考生查询
+     * @return 结果
+     */
+    @Override
+    public int updateEnrollSearch(EnrollSearch enrollSearch)
+    {
+        return enrollSearchMapper.updateEnrollSearch(enrollSearch);
+    }
+
+    /**
+     * 批量删除考生查询
+     * 
+     * @param stuEnrollIds 需要删除的考生查询主键
+     * @return 结果
+     */
+    @Override
+    public int deleteEnrollSearchByStuEnrollIds(String[] stuEnrollIds)
+    {
+        return enrollSearchMapper.deleteEnrollSearchByStuEnrollIds(stuEnrollIds);
+    }
+
+    /**
+     * 删除考生查询信息
+     * 
+     * @param stuEnrollId 考生查询主键
+     * @return 结果
+     */
+    @Override
+    public int deleteEnrollSearchByStuEnrollId(String stuEnrollId)
+    {
+        return enrollSearchMapper.deleteEnrollSearchByStuEnrollId(stuEnrollId);
+    }
+    //endregion
+    @Override
+    public QueryWrapper<EnrollSearch> getQueryWrapper(EnrollSearchQuery enrollSearchQuery){
+        QueryWrapper<EnrollSearch> queryWrapper = new QueryWrapper<>();
+        //如果不使用params可以删除
+        Map<String, Object> params = enrollSearchQuery.getParams();
+        if (StringUtils.isNull(params)) {
+            params = new HashMap<>();
+        }
+        String stuEnrollId = enrollSearchQuery.getStuEnrollId();
+        queryWrapper.eq(StringUtils.isNotEmpty(stuEnrollId) ,"stu_enroll_id",stuEnrollId);
+
+        String stuNo = enrollSearchQuery.getStuNo();
+        queryWrapper.eq(StringUtils.isNotEmpty(stuNo) ,"stu_no",stuNo);
+
+        String classId = enrollSearchQuery.getClassId();
+        queryWrapper.eq(StringUtils.isNotEmpty(classId) ,"class_id",classId);
+
+        String dormId = enrollSearchQuery.getDormId();
+        queryWrapper.eq(StringUtils.isNotEmpty(dormId) ,"dorm_id",dormId);
+
+        String classTeacher = enrollSearchQuery.getClassTeacher();
+        queryWrapper.eq(StringUtils.isNotEmpty(classTeacher) ,"class_teacher",classTeacher);
+
+        String classTeacherContact = enrollSearchQuery.getClassTeacherContact();
+        queryWrapper.eq(StringUtils.isNotEmpty(classTeacherContact) ,"class_teacher_contact",classTeacherContact);
+
+        String classQq = enrollSearchQuery.getClassQq();
+        queryWrapper.eq(StringUtils.isNotEmpty(classQq) ,"class_qq",classQq);
+
+        return queryWrapper;
+    }
+
+    @Override
+    public List<EnrollSearchVo> convertVoList(List<EnrollSearch> enrollSearchList) {
+        if (StringUtils.isEmpty(enrollSearchList)) {
+            return Collections.emptyList();
+        }
+        return enrollSearchList.stream().map(EnrollSearchVo::objToVo).collect(Collectors.toList());
+    }
+
+}
