@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import com.lz.common.utils.StringUtils;
 
 import javax.annotation.Resource;
+
+import com.lz.common.utils.uuid.IdUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -63,6 +65,8 @@ public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, Enrol
     @Override
     public int insertEnrollBasic(EnrollBasic enrollBasic)
     {
+        Long id = IdUtils.snowflakeId();
+        enrollBasic.setStuEnrollId(id.toString());
         return enrollBasicMapper.insertEnrollBasic(enrollBasic);
     }
 
