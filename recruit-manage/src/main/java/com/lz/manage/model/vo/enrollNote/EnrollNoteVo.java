@@ -23,6 +23,8 @@ public class EnrollNoteVo implements Serializable
     /** 考生ID */
     @Excel(name = "考生ID")
     private String stuEnrollId;
+    @Excel(name = "考生姓名")
+    private String stuEnrollName;
 
     /** 通知书编号 */
     @Excel(name = "通知书编号")

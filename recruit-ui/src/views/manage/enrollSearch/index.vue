@@ -402,7 +402,7 @@ export default {
         if (valid) {
           if (this.form.stuEnrollId != null) {
             updateEnrollSearch(this.form).then(response => {
-              this.$modal.msgSuccess('修改成功')
+              this.$modal.msgSuccess('操作成功')
               this.open = false
               this.getList()
             })

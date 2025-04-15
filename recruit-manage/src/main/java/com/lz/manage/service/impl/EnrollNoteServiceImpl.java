@@ -5,11 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
+
 import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lz.common.utils.DateUtils;
+
 import javax.annotation.Resource;
+
+import com.lz.manage.model.domain.EnrollBasic;
+import com.lz.manage.service.IEnrollBasicService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -21,93 +29,115 @@ import com.lz.manage.model.vo.enrollNote.EnrollNoteVo;
 
 /**
  * 通知书信息Service业务层处理
- * 
+ *
  * @author YY
  * @date 2025-04-14
  */
 @Service
-public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollNote> implements IEnrollNoteService
-{
+public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollNote> implements IEnrollNoteService {
     @Resource
     private EnrollNoteMapper enrollNoteMapper;
 
+    @Resource
+    private IEnrollBasicService enrollBasicService;
+
     //region mybatis代码
+
     /**
      * 查询通知书信息
-     * 
+     *
      * @param stuEnrollId 通知书信息主键
      * @return 通知书信息
      */
     @Override
-    public EnrollNote selectEnrollNoteByStuEnrollId(String stuEnrollId)
-    {
+    public EnrollNote selectEnrollNoteByStuEnrollId(String stuEnrollId) {
         return enrollNoteMapper.selectEnrollNoteByStuEnrollId(stuEnrollId);
     }
 
     /**
      * 查询通知书信息列表
-     * 
+     *
      * @param enrollNote 通知书信息
      * @return 通知书信息
      */
     @Override
-    public List<EnrollNote> selectEnrollNoteList(EnrollNote enrollNote)
-    {
-        return enrollNoteMapper.selectEnrollNoteList(enrollNote);
+    public List<EnrollNote> selectEnrollNoteList(EnrollNote enrollNote) {
+        List<EnrollNote> enrollNotes = enrollNoteMapper.selectEnrollNoteList(enrollNote);
+        for (EnrollNote info : enrollNotes) {
+            EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(info.getStuEnrollId());
+            if (StringUtils.isNotNull(enrollBasic)) {
+                info.setStuEnrollName(enrollBasic.getStuName());
+            }
+        }
+        return enrollNotes;
     }
 
     /**
      * 新增通知书信息
-     * 
+     *
      * @param enrollNote 通知书信息
      * @return 结果
      */
     @Override
-    public int insertEnrollNote(EnrollNote enrollNote)
-    {
+    public int insertEnrollNote(EnrollNote enrollNote) {
+        //查询是否有此学生
+        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollNote.getStuEnrollId());
+        if (StringUtils.isNull(enrollBasic)) {
+            throw new RuntimeException("该考生不存在");
+        }
         enrollNote.setCreateTime(DateUtils.getNowDate());
         return enrollNoteMapper.insertEnrollNote(enrollNote);
     }
 
     /**
      * 修改通知书信息
-     * 
+     *
      * @param enrollNote 通知书信息
      * @return 结果
      */
     @Override
-    public int updateEnrollNote(EnrollNote enrollNote)
-    {
+    public int updateEnrollNote(EnrollNote enrollNote) {
+        //查询是否有此学生
+        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollNote.getStuEnrollId());
+        if (StringUtils.isNull(enrollBasic)) {
+            throw new RuntimeException("该考生不存在");
+        }
+        //查询是否存在信息
+        EnrollNote old = enrollNoteMapper.selectEnrollNoteByStuEnrollId(enrollNote.getStuEnrollId());
+        if (StringUtils.isNull(old)) {
+            enrollNote.setCreateBy(SecurityUtils.getUsername());
+            enrollNote.setCreateTime(DateUtils.getNowDate());
+        }
+        enrollNote.setUpdateBy(SecurityUtils.getUsername());
         enrollNote.setUpdateTime(DateUtils.getNowDate());
-        return enrollNoteMapper.updateEnrollNote(enrollNote);
+        return this.saveOrUpdate(enrollNote) ? 1 : 0;
     }
 
     /**
      * 批量删除通知书信息
-     * 
+     *
      * @param stuEnrollIds 需要删除的通知书信息主键
      * @return 结果
      */
     @Override
-    public int deleteEnrollNoteByStuEnrollIds(String[] stuEnrollIds)
-    {
+    public int deleteEnrollNoteByStuEnrollIds(String[] stuEnrollIds) {
         return enrollNoteMapper.deleteEnrollNoteByStuEnrollIds(stuEnrollIds);
     }
 
     /**
      * 删除通知书信息信息
-     * 
+     *
      * @param stuEnrollId 通知书信息主键
      * @return 结果
      */
     @Override
-    public int deleteEnrollNoteByStuEnrollId(String stuEnrollId)
-    {
+    public int deleteEnrollNoteByStuEnrollId(String stuEnrollId) {
         return enrollNoteMapper.deleteEnrollNoteByStuEnrollId(stuEnrollId);
     }
+
     //endregion
     @Override
-    public QueryWrapper<EnrollNote> getQueryWrapper(EnrollNoteQuery enrollNoteQuery){
+    public QueryWrapper<EnrollNote> getQueryWrapper(EnrollNoteQuery enrollNoteQuery) {
         QueryWrapper<EnrollNote> queryWrapper = new QueryWrapper<>();
         //如果不使用params可以删除
         Map<String, Object> params = enrollNoteQuery.getParams();
@@ -115,46 +145,46 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
             params = new HashMap<>();
         }
         String stuEnrollId = enrollNoteQuery.getStuEnrollId();
-        queryWrapper.eq(StringUtils.isNotEmpty(stuEnrollId) ,"stu_enroll_id",stuEnrollId);
+        queryWrapper.eq(StringUtils.isNotEmpty(stuEnrollId), "stu_enroll_id", stuEnrollId);
 
         String noteCode = enrollNoteQuery.getNoteCode();
-        queryWrapper.eq(StringUtils.isNotEmpty(noteCode) ,"note_code",noteCode);
+        queryWrapper.eq(StringUtils.isNotEmpty(noteCode), "note_code", noteCode);
 
         String planYear = enrollNoteQuery.getPlanYear();
-        queryWrapper.eq(StringUtils.isNotEmpty(planYear) ,"plan_year",planYear);
+        queryWrapper.eq(StringUtils.isNotEmpty(planYear), "plan_year", planYear);
 
         String provinceName = enrollNoteQuery.getProvinceName();
-        queryWrapper.like(StringUtils.isNotEmpty(provinceName) ,"province_name",provinceName);
+        queryWrapper.like(StringUtils.isNotEmpty(provinceName), "province_name", provinceName);
 
         String stuDeptName = enrollNoteQuery.getStuDeptName();
-        queryWrapper.like(StringUtils.isNotEmpty(stuDeptName) ,"stu_dept_name",stuDeptName);
+        queryWrapper.like(StringUtils.isNotEmpty(stuDeptName), "stu_dept_name", stuDeptName);
 
         String stuMajor = enrollNoteQuery.getStuMajor();
-        queryWrapper.eq(StringUtils.isNotEmpty(stuMajor) ,"stu_major",stuMajor);
+        queryWrapper.eq(StringUtils.isNotEmpty(stuMajor), "stu_major", stuMajor);
 
         String stuName = enrollNoteQuery.getStuName();
-        queryWrapper.like(StringUtils.isNotEmpty(stuName) ,"stu_name",stuName);
+        queryWrapper.like(StringUtils.isNotEmpty(stuName), "stu_name", stuName);
 
         String isEnroll = enrollNoteQuery.getIsEnroll();
-        queryWrapper.eq(StringUtils.isNotEmpty(isEnroll) ,"is_enroll",isEnroll);
+        queryWrapper.eq(StringUtils.isNotEmpty(isEnroll), "is_enroll", isEnroll);
 
         String notePrintStatus = enrollNoteQuery.getNotePrintStatus();
-        queryWrapper.eq(StringUtils.isNotEmpty(notePrintStatus) ,"note_print_status",notePrintStatus);
+        queryWrapper.eq(StringUtils.isNotEmpty(notePrintStatus), "note_print_status", notePrintStatus);
 
         String notePrintInfo = enrollNoteQuery.getNotePrintInfo();
-        queryWrapper.eq(StringUtils.isNotEmpty(notePrintInfo) ,"note_print_info",notePrintInfo);
+        queryWrapper.eq(StringUtils.isNotEmpty(notePrintInfo), "note_print_info", notePrintInfo);
 
         String createBy = enrollNoteQuery.getCreateBy();
-        queryWrapper.like(StringUtils.isNotEmpty(createBy) ,"create_by",createBy);
+        queryWrapper.like(StringUtils.isNotEmpty(createBy), "create_by", createBy);
 
         Date createTime = enrollNoteQuery.getCreateTime();
-        queryWrapper.between(StringUtils.isNotNull(params.get("beginCreateTime"))&&StringUtils.isNotNull(params.get("endCreateTime")),"create_time",params.get("beginCreateTime"),params.get("endCreateTime"));
+        queryWrapper.between(StringUtils.isNotNull(params.get("beginCreateTime")) && StringUtils.isNotNull(params.get("endCreateTime")), "create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
 
         String updateBy = enrollNoteQuery.getUpdateBy();
-        queryWrapper.like(StringUtils.isNotEmpty(updateBy) ,"update_by",updateBy);
+        queryWrapper.like(StringUtils.isNotEmpty(updateBy), "update_by", updateBy);
 
         Date updateTime = enrollNoteQuery.getUpdateTime();
-        queryWrapper.between(StringUtils.isNotNull(params.get("beginUpdateTime"))&&StringUtils.isNotNull(params.get("endUpdateTime")),"update_time",params.get("beginUpdateTime"),params.get("endUpdateTime"));
+        queryWrapper.between(StringUtils.isNotNull(params.get("beginUpdateTime")) && StringUtils.isNotNull(params.get("endUpdateTime")), "update_time", params.get("beginUpdateTime"), params.get("endUpdateTime"));
 
         return queryWrapper;
     }
