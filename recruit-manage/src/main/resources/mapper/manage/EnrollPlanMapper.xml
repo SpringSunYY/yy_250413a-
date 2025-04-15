@@ -32,20 +32,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectEnrollPlanList" parameterType="EnrollPlan" resultMap="EnrollPlanResult">
         <include refid="selectEnrollPlanVo"/>
-        <where>  
-            <if test="planId != null  and planId != ''"> and plan_id = #{planId}</if>
-            <if test="planYear != null  and planYear != ''"> and plan_year = #{planYear}</if>
-            <if test="spId != null  and spId != ''"> and sp_id = #{spId}</if>
-            <if test="spName != null  and spName != ''"> and sp_name like concat('%', #{spName}, '%')</if>
-            <if test="stuDeptName != null  and stuDeptName != ''"> and stu_dept_name like concat('%', #{stuDeptName}, '%')</if>
-            <if test="subjectSortName != null  and subjectSortName != ''"> and subject_sort_name like concat('%', #{subjectSortName}, '%')</if>
-            <if test="provinceName != null  and provinceName != ''"> and province_name like concat('%', #{provinceName}, '%')</if>
-            <if test="planNum != null "> and plan_num = #{planNum}</if>
-            <if test="tuitionFee != null "> and tuition_fee = #{tuitionFee}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and DATE_FORMAT(create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}</if>
-            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
-            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and DATE_FORMAT(update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        <where>
+            <if test="planId != null  and planId != ''">and plan_id = #{planId}</if>
+            <if test="planYear != null  and planYear != ''">and plan_year = #{planYear}</if>
+            <if test="spId != null  and spId != ''">and sp_id = #{spId}</if>
+            <if test="spName != null  and spName != ''">and sp_name like concat('%', #{spName}, '%')</if>
+            <if test="stuDeptName != null  and stuDeptName != ''">and stu_dept_name like concat('%', #{stuDeptName},
+                '%')
+            </if>
+            <if test="subjectSortName != null  and subjectSortName != ''">and subject_sort_name like concat('%',
+                #{subjectSortName}, '%')
+            </if>
+            <if test="provinceName != null  and provinceName != ''">and province_name like concat('%', #{provinceName},
+                '%')
+            </if>
+            <if test="planNum != null ">and plan_num = #{planNum}</if>
+            <if test="tuitionFee != null ">and tuition_fee = #{tuitionFee}</if>
+            <if test="createBy != null  and createBy != ''">and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and DATE_FORMAT(update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
         </where>
     </select>
     
