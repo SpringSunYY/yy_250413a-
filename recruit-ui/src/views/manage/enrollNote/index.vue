@@ -275,6 +275,14 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-printer"
+            @click="openPrint(scope.row)"
+            v-hasPermi="['manage:enrollNote:edit']"
+          >打印
+          </el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['manage:enrollNote:remove']"
@@ -324,7 +332,7 @@
           <el-input v-model="form.noteCodeSuffix" placeholder="请输入通知书编号-后缀"/>
         </el-form-item>
         <el-form-item label="招生年度" prop="planYear">
-          <el-input-number  :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>
+          <el-input-number :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>
         </el-form-item>
         <el-form-item label="省份名称" prop="provinceName">
           <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>
@@ -385,18 +393,35 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog
+      title="打印录取通知书"
+      :visible.sync="printVisible"
+      width="1000px"
+      append-to-body
+    >
+      <PrintContent :student="student"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="printVisible = false">取 消</el-button>
+        <el-button type="primary" v-print="'#printContent'">打 印</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listEnrollNote, getEnrollNote, delEnrollNote, addEnrollNote, updateEnrollNote } from '@/api/manage/enrollNote'
 import { listEnrollBasic } from '@/api/manage/enrollBasic'
+import PrintContent from '@/components/PrintContent/index.vue'
 
 export default {
   name: 'EnrollNote',
+  components: { PrintContent },
   dicts: ['is_common_whether', 'is_enroll'],
   data() {
     return {
+      student: {},
+      printVisible: false, // 控制是否渲染打印组件
       //考生相关信息
       enrollInfoList: [],
       enrollLoading: false,
@@ -480,6 +505,13 @@ export default {
     this.getEnrollInfoList()
   },
   methods: {
+    openPrint(row) {
+      getEnrollNote(row.stuEnrollId).then(res => {
+        console.log(res.data)
+        this.student = res.data
+        this.printVisible = true
+      })
+    },
     /**
      * 获取考生列表推荐
      * @param query
