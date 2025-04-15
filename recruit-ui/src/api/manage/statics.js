@@ -7,3 +7,11 @@ export function getStaticsPie(query) {
     params: query
   })
 }
+
+export function getStaticsLine(query) {
+  return request({
+    url: '/manage/statics/line',
+    method: 'get',
+    params: query
+  })
+}

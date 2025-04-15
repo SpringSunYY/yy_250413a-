@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <my-line-chart/>
+      <my-line-chart :chart-data="lineDate" name="每日联系"/>
     </el-row>
 
     <el-row :gutter="32">
@@ -34,7 +34,7 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import MyLineChart from '@/views/dashboard/MyLineChart.vue'
-import { getStaticsPie } from '@/api/manage/statics'
+import { getStaticsLine, getStaticsPie } from '@/api/manage/statics'
 
 export default {
   name: 'Index',
@@ -50,13 +50,15 @@ export default {
     return {
       provinceData: {},
       schoolData: {},
-      majorData: {}
+      majorData: {},
+      lineDate: {}
     }
   },
   created() {
     this.getProvinceData()
     this.getSchoolData()
     this.getMajorData()
+    this.getLineData()
   },
   methods: {
     getProvinceData() {
@@ -72,6 +74,11 @@ export default {
     getMajorData() {
       getStaticsPie({ staticFiled: 'stu_major' }).then(res => {
         this.majorData = res.data
+      })
+    },
+    getLineData() {
+      getStaticsLine({}).then(res => {
+        this.lineDate = res.data
       })
     }
   }

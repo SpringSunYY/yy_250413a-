@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface StaticsMapper {
     List<StaticRo> getStaticsPie(StaticsDto staticsDto);
+
+    List<StaticRo> getStaticsLine(StaticsDto staticsDto);
 }

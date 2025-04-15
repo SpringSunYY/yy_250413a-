@@ -39,4 +39,9 @@ public class StaticsController extends BaseController {
         return AjaxResult.success(staticsService.getStaticsPie(staticsDto));
     }
 
+    @GetMapping("/line")
+    public AjaxResult getStaticsLine(StaticsDto staticsDto) {
+        return AjaxResult.success(staticsService.getStaticsLine(staticsDto));
+    }
+
 }

@@ -5,6 +5,7 @@ import com.lz.common.utils.spring.SpringUtils;
 import com.lz.manage.mapper.StaticsMapper;
 import com.lz.manage.model.statics.StaticsDto;
 import com.lz.manage.model.statics.ro.StaticRo;
+import com.lz.manage.model.statics.vo.LineStaticVo;
 import com.lz.manage.model.statics.vo.PieStaticVo;
 import com.lz.manage.service.IStaticsService;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,25 @@ public class StaticsServiceImpl implements IStaticsService {
         pieStaticVo.setNames(names);
         pieStaticVo.setDates(dates);
         return pieStaticVo;
+    }
+
+    @Override
+    public LineStaticVo getStaticsLine(StaticsDto staticsDto) {
+        List<StaticRo> staticRoList = staticsMapper.getStaticsLine(staticsDto);
+        LineStaticVo lineStaticVo = new LineStaticVo();
+        //如果没有返回
+        if (StringUtils.isEmpty(staticRoList)) {
+            return lineStaticVo;
+        }
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Long> totals = new ArrayList<>();
+
+        for (StaticRo staticRo : staticRoList) {
+            names.add(staticRo.getName());
+            totals.add(staticRo.getTotal());
+        }
+        lineStaticVo.setTotals(totals);
+        lineStaticVo.setNames(names);
+        return lineStaticVo;
     }
 }
