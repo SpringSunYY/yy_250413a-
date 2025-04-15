@@ -136,12 +136,12 @@
       />
       <el-table-column label="开始时间" align="center" v-if="columns[3].visible" prop="contactStartTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contactStartTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.contactStartTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="结束时间" align="center" v-if="columns[4].visible" prop="contactEndTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.contactEndTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.contactEndTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="接听人" :show-overflow-tooltip="true" align="center" v-if="columns[5].visible"
