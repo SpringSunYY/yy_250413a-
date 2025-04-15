@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lz.common.exception.ServiceException;
 import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 
@@ -195,6 +197,21 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
             return Collections.emptyList();
         }
         return enrollNoteList.stream().map(EnrollNoteVo::objToVo).collect(Collectors.toList());
+    }
+
+    @Override
+    public EnrollNote stuQuery(EnrollBasic enrollBasic) {
+        String stuEnrollId = "";
+        try {
+            EnrollBasic basic = enrollBasicService.getOne(new LambdaQueryWrapper<EnrollBasic>()
+                    .eq(EnrollBasic::getStuName, enrollBasic.getStuName())
+                    .eq(EnrollBasic::getExamNum, enrollBasic.getExamNum())
+                    .eq(EnrollBasic::getIdCard, enrollBasic.getIdCard()));
+           stuEnrollId = basic.getStuEnrollId();
+        } catch (Exception e) {
+            throw new ServiceException("查询失败，没有此学生");
+        }
+        return enrollNoteMapper.selectEnrollNoteByStuEnrollId(stuEnrollId);
     }
 
 }

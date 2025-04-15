@@ -9,6 +9,14 @@ export function listEnrollNote(query) {
   })
 }
 
+export function queryEnrollNote(query) {
+  return request({
+    url: '/manage/enrollNote/query',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询通知书信息详细
 export function getEnrollNote(stuEnrollId) {
   return request({
