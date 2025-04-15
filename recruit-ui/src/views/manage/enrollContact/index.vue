@@ -392,7 +392,7 @@ export default {
   dicts: ['is_common_whether'],
   data() {
     return {
-      //模版相关信息
+      //考生相关信息
       enrollInfoList: [],
       enrollLoading: false,
       enrollQueryParams: {

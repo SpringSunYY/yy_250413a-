@@ -44,6 +44,9 @@ public class EnrollContactRecord implements Serializable {
      */
     @Excel(name = "考生ID")
     private String stuEnrollId;
+    @Excel(name = "考生姓名")
+    @TableField(exist = false)
+    private String stuEnrollName;
 
     /**
      * 开始时间

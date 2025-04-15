@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="联络记录ID" prop="contactId">
+      <el-form-item label="联络记录" prop="contactId">
         <el-input
           v-model="queryParams.contactId"
           placeholder="请输入联络记录ID"
@@ -18,12 +18,23 @@
         />
       </el-form-item>
       <el-form-item label="考生ID" prop="stuEnrollId">
-        <el-input
+        <el-select
           v-model="queryParams.stuEnrollId"
-          placeholder="请输入考生ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入考生姓名"
+          :remote-method="selectEnrollInfoList"
+          :loading="enrollLoading"
+        >
+          <el-option
+            v-for="item in enrollInfoList"
+            :key="item.stuEnrollId"
+            :label="`${item.stuName}--${item.examNum}`"
+            :value="item.stuEnrollId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="接听人" prop="answerPeopleName">
         <el-input
@@ -132,7 +143,7 @@
       <el-table-column label="记录ID" align="center" v-if="columns[0].visible" prop="recordId"/>
       <el-table-column label="联络记录ID" align="center" v-if="columns[1].visible" prop="contactId"/>
       <el-table-column label="考生ID" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
-                       prop="stuEnrollId"
+                       prop="stuEnrollName"
       />
       <el-table-column label="开始时间" align="center" v-if="columns[3].visible" prop="contactStartTime" width="180">
         <template slot-scope="scope">
@@ -229,14 +240,14 @@
     <!-- 添加或修改考生联络记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="考生ID" prop="stuEnrollId">
-          <el-input v-model="form.stuEnrollId" placeholder="请输入考生ID"/>
+        <el-form-item label="联络ID" prop="stuEnrollId">
+          <el-input v-model="form.contactId" placeholder="请输入联络ID"/>
         </el-form-item>
         <el-form-item label="开始时间" prop="contactStartTime">
           <el-date-picker clearable
                           v-model="form.contactStartTime"
-                          type="date"
-                          value-format="yyyy-MM-dd"
+                          type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss"
                           placeholder="请选择开始时间"
           >
           </el-date-picker>
@@ -244,8 +255,8 @@
         <el-form-item label="结束时间" prop="contactEndTime">
           <el-date-picker clearable
                           v-model="form.contactEndTime"
-                          type="date"
-                          value-format="yyyy-MM-dd"
+                          type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss"
                           placeholder="请选择结束时间"
           >
           </el-date-picker>
@@ -253,24 +264,24 @@
         <el-form-item label="接听人" prop="answerPeopleName">
           <el-input v-model="form.answerPeopleName" placeholder="请输入接听人"/>
         </el-form-item>
-        <el-form-item label="与考生关系" prop="answerPeopleRelation">
+        <el-form-item label="考生关系" prop="answerPeopleRelation">
           <el-input v-model="form.answerPeopleRelation" placeholder="请输入与考生关系"/>
         </el-form-item>
         <el-form-item label="关系说明" prop="answerPeopleRemark">
           <el-input v-model="form.answerPeopleRemark" placeholder="请输入关系说明"/>
         </el-form-item>
         <el-form-item label="回复内容">
-          <editor v-model="form.replyContent" :min-height="192"/>
+          <el-input type="textarea" placeholder="请输入回复内容" v-model="form.replyContent"/>
         </el-form-item>
         <el-form-item label="回复说明" prop="replyContentRemark">
           <el-input v-model="form.replyContentRemark" placeholder="请输入回复说明"/>
         </el-form-item>
-        <el-form-item label="附件名称" prop="fileName">
-          <el-input v-model="form.fileName" placeholder="请输入附件名称"/>
-        </el-form-item>
-        <el-form-item label="附件后缀名" prop="fileSuffix">
-          <el-input v-model="form.fileSuffix" placeholder="请输入附件后缀名"/>
-        </el-form-item>
+        <!--        <el-form-item label="附件名称" prop="fileName">-->
+        <!--          <el-input v-model="form.fileName" placeholder="请输入附件名称"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="附件后缀名" prop="fileSuffix">-->
+        <!--          <el-input v-model="form.fileSuffix" placeholder="请输入附件后缀名"/>-->
+        <!--        </el-form-item>-->
         <el-form-item label="附件路径" prop="fileUrl">
           <file-upload v-model="form.fileUrl"/>
         </el-form-item>
@@ -294,32 +305,41 @@ import {
   addEnrollContactRecord,
   updateEnrollContactRecord
 } from '@/api/manage/enrollContactRecord'
+import { listEnrollBasic } from '@/api/manage/enrollBasic'
 
 export default {
   name: 'EnrollContactRecord',
   data() {
     return {
+      //考生相关信息
+      enrollInfoList: [],
+      enrollLoading: false,
+      enrollQueryParams: {
+        stuName: '',
+        pageNum: 1,
+        pageSize: 100
+      },
       baseUrl: process.env.VUE_APP_BASE_API,
       //表格展示列
       columns: [
-        { key: 0, label: '记录ID', visible: true },
-        { key: 1, label: '联络记录ID', visible: true },
+        { key: 0, label: '记录ID', visible: false },
+        { key: 1, label: '联络记录ID', visible: false },
         { key: 2, label: '考生ID', visible: true },
         { key: 3, label: '开始时间', visible: true },
         { key: 4, label: '结束时间', visible: true },
         { key: 5, label: '接听人', visible: true },
-        { key: 6, label: '与考生关系', visible: true },
-        { key: 7, label: '关系说明', visible: true },
+        { key: 6, label: '与考生关系', visible: false },
+        { key: 7, label: '关系说明', visible: false },
         { key: 8, label: '回复内容', visible: true },
-        { key: 9, label: '回复说明', visible: true },
-        { key: 10, label: '附件名称', visible: true },
-        { key: 11, label: '附件后缀名', visible: true },
+        { key: 9, label: '回复说明', visible: false },
+        { key: 10, label: '附件名称', visible: false },
+        { key: 11, label: '附件后缀名', visible: false },
         { key: 12, label: '附件路径', visible: true },
-        { key: 13, label: '创建者', visible: true },
-        { key: 14, label: '创建时间', visible: true },
-        { key: 15, label: '更新者', visible: true },
-        { key: 16, label: '更新时间', visible: true },
-        { key: 17, label: '备注', visible: true }
+        { key: 13, label: '创建者', visible: false },
+        { key: 14, label: '创建时间', visible: false },
+        { key: 15, label: '更新者', visible: false },
+        { key: 16, label: '更新时间', visible: false },
+        { key: 17, label: '备注', visible: false }
       ],
       // 遮罩层
       loading: true,
@@ -365,8 +385,45 @@ export default {
   },
   created() {
     this.getList()
+    this.getEnrollInfoList()
   },
   methods: {
+    /**
+     * 获取考生列表推荐
+     * @param query
+     */
+    selectEnrollInfoList(query) {
+      if (query !== '') {
+        this.enrollLoading = true
+        this.enrollQueryParams.stuName = query
+        setTimeout(() => {
+          this.getEnrollInfoList()
+        }, 200)
+      } else {
+        this.enrollInfoList = []
+        this.enrollQueryParams.stuName = null
+      }
+    }
+    ,
+    /**
+     * 获取考生信息列表
+     */
+    getEnrollInfoList() {
+      //添加查询参数
+      if (this.form.stuEnrollId != null) {
+        this.enrollQueryParams.enrollId = this.form.stuEnrollId
+      } else {
+        this.enrollQueryParams.enrollId = null
+      }
+      if (this.enrollQueryParams.stuName !== '') {
+        this.enrollQueryParams.enrollId = null
+      }
+      this.enrollInfoList = []
+      listEnrollBasic(this.enrollQueryParams).then(res => {
+        this.enrollInfoList = res?.rows
+        this.enrollLoading = false
+      })
+    },
     /** 查询考生联络记录列表 */
     getList() {
       this.loading = true

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import com.lz.common.annotation.Excel;
@@ -38,6 +39,8 @@ public class EnrollContactRecordVo implements Serializable {
      */
     @Excel(name = "考生ID")
     private String stuEnrollId;
+    @Excel(name = "考生姓名")
+    private String stuEnrollName;
 
     /**
      * 开始时间

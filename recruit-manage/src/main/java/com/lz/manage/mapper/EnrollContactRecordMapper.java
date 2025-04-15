@@ -18,7 +18,7 @@ public interface EnrollContactRecordMapper extends BaseMapper<EnrollContactRecor
      * @param contactId 考生联络记录主键
      * @return 考生联络记录
      */
-    public EnrollContactRecord selectEnrollContactRecordByContactId(String contactId);
+    public EnrollContactRecord selectEnrollContactRecordByRecordId(String contactId);
 
     /**
      * 查询考生联络记录列表
