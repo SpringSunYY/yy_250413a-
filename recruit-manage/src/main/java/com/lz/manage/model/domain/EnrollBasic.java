@@ -285,7 +285,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 档案状态
      */
-    @Excel(name = "档案状态",readConverterExp = "0=未录取，1=已录取")
+    @Excel(name = "档案状态",readConverterExp = "0=未录取，1=已录取",prompt = "请填入未录取、已录取")
     private String docStatus;
 
     /**

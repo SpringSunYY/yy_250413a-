@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="form" :rules="rules" label-width="100px" class="login-form">
-      <h3 class="title">高校招生管理系统</h3>
+      <h3 class="title">高校招生工作辅助管理系统</h3>
       <el-form-item label="姓名" prop="stuName">
         <el-input v-model="form.stuName" placeholder="请输入姓名"/>
       </el-form-item>

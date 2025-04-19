@@ -679,7 +679,7 @@ export default {
       columns: [
         { key: 0, label: '考生ID', visible: false },
         { key: 1, label: '招生年度', visible: true },
-        { key: 2, label: '考生号', visible: false },
+        { key: 2, label: '考生号', visible: true },
         { key: 3, label: '准考证号', visible: false },
         { key: 4, label: '姓名', visible: true },
         { key: 5, label: '科类', visible: true },
@@ -688,7 +688,7 @@ export default {
         { key: 8, label: '省份名称', visible: true },
         { key: 9, label: '地区代码', visible: false },
         { key: 10, label: '地区名称', visible: false },
-        { key: 11, label: '身份证号', visible: false },
+        { key: 11, label: '身份证号', visible: true },
         { key: 12, label: '性别', visible: false },
         { key: 13, label: '出生年月', visible: false },
         { key: 14, label: '民族', visible: false },
