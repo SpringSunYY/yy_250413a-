@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="考生ID" prop="stuEnrollId">
+      <el-form-item label="考生" prop="stuEnrollId">
         <el-select
           v-model="queryParams.stuEnrollId"
           filterable
@@ -142,7 +142,7 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="记录ID" align="center" v-if="columns[0].visible" prop="recordId"/>
       <el-table-column label="联络记录ID" align="center" v-if="columns[1].visible" prop="contactId"/>
-      <el-table-column label="考生ID" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
+      <el-table-column label="考生" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
                        prop="stuEnrollName"
       />
       <el-table-column label="开始时间" align="center" v-if="columns[3].visible" prop="contactStartTime" width="180">
@@ -324,7 +324,7 @@ export default {
       columns: [
         { key: 0, label: '记录ID', visible: false },
         { key: 1, label: '联络记录ID', visible: false },
-        { key: 2, label: '考生ID', visible: true },
+        { key: 2, label: '考生', visible: true },
         { key: 3, label: '开始时间', visible: true },
         { key: 4, label: '结束时间', visible: true },
         { key: 5, label: '接听人', visible: true },

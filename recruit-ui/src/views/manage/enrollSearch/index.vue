@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="考生ID" prop="stuEnrollId">
+      <el-form-item label="考生" prop="stuEnrollId">
         <el-select
           v-model="queryParams.stuEnrollId"
           filterable
@@ -27,6 +27,56 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="招生年度" prop="planYear">
+        <el-input
+          v-model="queryParams.planYear"
+          placeholder="请输入招生年度"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="省份名称" prop="provinceName">
+        <el-input
+          v-model="queryParams.provinceName"
+          placeholder="请输入省份名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="录取院校" prop="stuDeptName">
+        <el-input
+          v-model="queryParams.stuDeptName"
+          placeholder="请输入录取院校"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="录取专业" prop="stuMajor">
+        <el-input
+          v-model="queryParams.stuMajor"
+          placeholder="请输入录取专业"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="学生姓名" prop="stuName">
+        <el-input
+          v-model="queryParams.stuName"
+          placeholder="请输入学生姓名"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="是否录取" prop="isEnroll">
+        <el-select v-model="queryParams.isEnroll" placeholder="请选择是否录取" clearable>
+          <el-option
+            v-for="dict in dict.type.is_enroll"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="班级" prop="classId">
         <el-input
@@ -75,17 +125,17 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['manage:enrollSearch:add']"
-        >新增
-        </el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          plain-->
+<!--          icon="el-icon-plus"-->
+<!--          size="mini"-->
+<!--          @click="handleAdd"-->
+<!--          v-hasPermi="['manage:enrollSearch:add']"-->
+<!--        >新增-->
+<!--        </el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -126,23 +176,43 @@
 
     <el-table v-loading="loading" :data="enrollSearchList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="考生ID" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
-      <el-table-column label="学号" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
+      <el-table-column label="考生" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
+      <el-table-column label="招生年度" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
+                       prop="planYear"
+      />
+      <el-table-column label="省份名称" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
+                       prop="provinceName"
+      />
+      <el-table-column label="录取院校" :show-overflow-tooltip="true" align="center" v-if="columns[3].visible"
+                       prop="stuDeptName"
+      />
+      <el-table-column label="录取专业" :show-overflow-tooltip="true" align="center" v-if="columns[4].visible"
+                       prop="stuMajor"
+      />
+      <el-table-column label="学生姓名" :show-overflow-tooltip="true" align="center" v-if="columns[5].visible"
+                       prop="stuName"
+      />
+      <el-table-column label="是否录取" align="center" v-if="columns[6].visible" prop="isEnroll">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.is_enroll" :value="scope.row.isEnroll"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="学号" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible"
                        prop="stuNo"
       />
-      <el-table-column label="班级" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
+      <el-table-column label="班级" :show-overflow-tooltip="true" align="center" v-if="columns[8].visible"
                        prop="classId"
       />
-      <el-table-column label="宿舍号" :show-overflow-tooltip="true" align="center" v-if="columns[3].visible"
+      <el-table-column label="宿舍号" :show-overflow-tooltip="true" align="center" v-if="columns[9].visible"
                        prop="dormId"
       />
-      <el-table-column label="辅导员" :show-overflow-tooltip="true" align="center" v-if="columns[4].visible"
+      <el-table-column label="辅导员" :show-overflow-tooltip="true" align="center" v-if="columns[10].visible"
                        prop="classTeacher"
       />
-      <el-table-column label="辅导员联系方式" :show-overflow-tooltip="true" align="center" v-if="columns[5].visible"
+      <el-table-column label="辅导员联系方式" :show-overflow-tooltip="true" align="center" v-if="columns[11].visible"
                        prop="classTeacherContact"
       />
-      <el-table-column label="QQ群" :show-overflow-tooltip="true" align="center" v-if="columns[6].visible"
+      <el-table-column label="QQ群" :show-overflow-tooltip="true" align="center" v-if="columns[12].visible"
                        prop="classQq"
       />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -178,25 +248,25 @@
     <!-- 添加或修改考生查询对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="考生ID" prop="stuEnrollId">
-          <el-select
-            v-model="form.stuEnrollId"
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请输入考生姓名"
-            :remote-method="selectEnrollInfoList"
-            :loading="enrollLoading"
-          >
-            <el-option
-              v-for="item in enrollInfoList"
-              :key="item.stuEnrollId"
-              :label="`${item.stuName}--${item.examNum}`"
-              :value="item.stuEnrollId"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item v-if="form.stuEnrollId ===null" label="考生" prop="stuEnrollId">-->
+<!--          <el-select-->
+<!--            v-model="form.stuEnrollId"-->
+<!--            filterable-->
+<!--            remote-->
+<!--            reserve-keyword-->
+<!--            placeholder="请输入考生姓名"-->
+<!--            :remote-method="selectEnrollInfoList"-->
+<!--            :loading="enrollLoading"-->
+<!--          >-->
+<!--            <el-option-->
+<!--              v-for="item in enrollInfoList"-->
+<!--              :key="item.stuEnrollId"-->
+<!--              :label="`${item.stuName}&#45;&#45;${item.examNum}`"-->
+<!--              :value="item.stuEnrollId"-->
+<!--            >-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="学号" prop="stuNo">
           <el-input v-model="form.stuNo" placeholder="请输入学号"/>
         </el-form-item>
@@ -239,6 +309,7 @@ import { listEnrollBasic } from '@/api/manage/enrollBasic'
 
 export default {
   name: 'EnrollSearch',
+  dicts: ['is_common_whether', 'is_enroll'],
   data() {
     return {
       //考生相关信息
@@ -251,13 +322,19 @@ export default {
       },
       //表格展示列
       columns: [
-        { key: 0, label: '考生ID', visible: true },
-        { key: 1, label: '学号', visible: true },
-        { key: 2, label: '班级', visible: true },
-        { key: 3, label: '宿舍号', visible: true },
-        { key: 4, label: '辅导员', visible: true },
-        { key: 5, label: '辅导员联系方式', visible: true },
-        { key: 6, label: 'QQ群', visible: true }
+        { key: 0, label: '考生', visible: true },
+        { key: 1, label: '招生年度', visible: true },
+        { key: 2, label: '省份名称', visible: true },
+        { key: 3, label: '录取院校', visible: true },
+        { key: 4, label: '录取专业', visible: true },
+        { key: 5, label: '学生姓名', visible: true },
+        { key: 6, label: '是否录取', visible: true },
+        { key: 7, label: '学号', visible: true },
+        { key: 8, label: '班级', visible: true },
+        { key: 9, label: '宿舍号', visible: true },
+        { key: 10, label: '辅导员', visible: true },
+        { key: 11, label: '辅导员联系方式', visible: true },
+        { key: 12, label: 'QQ群', visible: true }
       ],
       // 遮罩层
       loading: true,
@@ -282,7 +359,14 @@ export default {
         pageNum: 1,
         pageSize: 10,
         stuEnrollId: null,
+        noteCode: null,
+        planYear: null,
+        provinceName: null,
+        stuDeptName: null,
+        stuMajor: null,
+        stuName: null,
         stuNo: null,
+        isEnroll: null,
         classId: null,
         dormId: null,
         classTeacher: null,
@@ -392,6 +476,10 @@ export default {
       const stuEnrollId = row.stuEnrollId || this.ids
       getEnrollSearch(stuEnrollId).then(response => {
         this.form = response.data
+        if (!this.form) {
+          this.reset()
+          this.form.stuEnrollId = stuEnrollId
+        }
         this.open = true
         this.title = '修改考生查询'
       })

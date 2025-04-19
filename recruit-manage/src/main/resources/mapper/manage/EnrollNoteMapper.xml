@@ -1,56 +1,85 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lz.manage.mapper.EnrollNoteMapper">
-    
+
     <resultMap type="EnrollNote" id="EnrollNoteResult">
-        <result property="stuEnrollId"    column="stu_enroll_id"    />
-        <result property="noteCode"    column="note_code"    />
-        <result property="noteCodePrefix"    column="note_code_prefix"    />
-        <result property="noteCodeSuffix"    column="note_code_suffix"    />
-        <result property="planYear"    column="plan_year"    />
-        <result property="provinceName"    column="province_name"    />
-        <result property="stuDeptName"    column="stu_dept_name"    />
-        <result property="stuMajor"    column="stu_major"    />
-        <result property="stuName"    column="stu_name"    />
-        <result property="isEnroll"    column="is_enroll"    />
-        <result property="noteSecurityCode"    column="note_security_code"    />
-        <result property="noteExpCode"    column="note_exp_code"    />
-        <result property="notePrintStatus"    column="note_print_status"    />
-        <result property="notePrintInfo"    column="note_print_info"    />
-        <result property="notePrintTime"    column="note_print_time"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="stuEnrollId" column="stu_enroll_id"/>
+        <result property="noteCode" column="note_code"/>
+        <result property="noteCodePrefix" column="note_code_prefix"/>
+        <result property="noteCodeSuffix" column="note_code_suffix"/>
+        <result property="planYear" column="plan_year"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="stuDeptName" column="stu_dept_name"/>
+        <result property="stuMajor" column="stu_major"/>
+        <result property="stuName" column="stu_name"/>
+        <result property="isEnroll" column="is_enroll"/>
+        <result property="noteSecurityCode" column="note_security_code"/>
+        <result property="noteExpCode" column="note_exp_code"/>
+        <result property="notePrintStatus" column="note_print_status"/>
+        <result property="notePrintInfo" column="note_print_info"/>
+        <result property="notePrintTime" column="note_print_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectEnrollNoteVo">
-        select stu_enroll_id, note_code, note_code_prefix, note_code_suffix, plan_year, province_name, stu_dept_name, stu_major, stu_name, is_enroll, note_security_code, note_exp_code, note_print_status, note_print_info, note_print_time, create_by, create_time, update_by, update_time, remark from stu_enroll_note
+        select stu_enroll_id,
+               note_code,
+               note_code_prefix,
+               note_code_suffix,
+               plan_year,
+               province_name,
+               stu_dept_name,
+               stu_major,
+               stu_name,
+               is_enroll,
+               note_security_code,
+               note_exp_code,
+               note_print_status,
+               note_print_info,
+               note_print_time,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from stu_enroll_note
     </sql>
 
     <select id="selectEnrollNoteList" parameterType="EnrollNote" resultMap="EnrollNoteResult">
         <include refid="selectEnrollNoteVo"/>
-        <where>  
-            <if test="stuEnrollId != null  and stuEnrollId != ''"> and stu_enroll_id = #{stuEnrollId}</if>
-            <if test="noteCode != null  and noteCode != ''"> and note_code = #{noteCode}</if>
-            <if test="planYear != null  and planYear != ''"> and plan_year = #{planYear}</if>
-            <if test="provinceName != null  and provinceName != ''"> and province_name like concat('%', #{provinceName}, '%')</if>
-            <if test="stuDeptName != null  and stuDeptName != ''"> and stu_dept_name like concat('%', #{stuDeptName}, '%')</if>
-            <if test="stuMajor != null  and stuMajor != ''"> and stu_major = #{stuMajor}</if>
-            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
-            <if test="isEnroll != null  and isEnroll != ''"> and is_enroll = #{isEnroll}</if>
-            <if test="notePrintStatus != null  and notePrintStatus != ''"> and note_print_status = #{notePrintStatus}</if>
-            <if test="notePrintInfo != null  and notePrintInfo != ''"> and note_print_info = #{notePrintInfo}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and DATE_FORMAT(create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}</if>
-            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
-            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and DATE_FORMAT(update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        <where>
+            <if test="stuEnrollId != null  and stuEnrollId != ''">and stu_enroll_id = #{stuEnrollId}</if>
+            <if test="noteCode != null  and noteCode != ''">and note_code = #{noteCode}</if>
+            <if test="planYear != null  and planYear != ''">and plan_year = #{planYear}</if>
+            <if test="provinceName != null  and provinceName != ''">and province_name like concat('%', #{provinceName},
+                '%')
+            </if>
+            <if test="stuDeptName != null  and stuDeptName != ''">and stu_dept_name like concat('%', #{stuDeptName},
+                '%')
+            </if>
+            <if test="stuMajor != null  and stuMajor != ''">and stu_major = #{stuMajor}</if>
+            <if test="stuName != null  and stuName != ''">and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="isEnroll != null  and isEnroll != ''">and is_enroll = #{isEnroll}</if>
+            <if test="notePrintStatus != null  and notePrintStatus != ''">and note_print_status = #{notePrintStatus}
+            </if>
+            <if test="notePrintInfo != null  and notePrintInfo != ''">and note_print_info = #{notePrintInfo}</if>
+            <if test="createBy != null  and createBy != ''">and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and DATE_FORMAT(update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
         </where>
     </select>
-    
+
     <select id="selectEnrollNoteByStuEnrollId" parameterType="String" resultMap="EnrollNoteResult">
         <include refid="selectEnrollNoteVo"/>
         where stu_enroll_id = #{stuEnrollId}
@@ -79,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stuEnrollId != null">#{stuEnrollId},</if>
             <if test="noteCode != null">#{noteCode},</if>
@@ -101,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateEnrollNote" parameterType="EnrollNote">
@@ -131,11 +160,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteEnrollNoteByStuEnrollId" parameterType="String">
-        delete from stu_enroll_note where stu_enroll_id = #{stuEnrollId}
+        delete
+        from stu_enroll_note
+        where stu_enroll_id = #{stuEnrollId}
     </delete>
 
     <delete id="deleteEnrollNoteByStuEnrollIds" parameterType="String">
-        delete from stu_enroll_note where stu_enroll_id in 
+        delete from stu_enroll_note where stu_enroll_id in
         <foreach item="stuEnrollId" collection="array" open="(" separator="," close=")">
             #{stuEnrollId}
         </foreach>

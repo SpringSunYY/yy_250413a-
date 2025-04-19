@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="考生ID" prop="stuEnrollId">
+      <el-form-item label="考生" prop="stuEnrollId">
         <el-input
           v-model="queryParams.stuEnrollId"
-          placeholder="请输入考生ID"
+          placeholder="请输入考生"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -231,7 +231,7 @@
 
     <el-table v-loading="loading" :data="enrollBasicList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="考生ID" align="center" v-if="columns[0].visible" prop="stuEnrollId"/>
+      <el-table-column label="考生" align="center" v-if="columns[0].visible" prop="stuEnrollId"/>
       <el-table-column label="招生年度" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
                        prop="enrollYear"
       />
@@ -677,7 +677,7 @@ export default {
     return {
       //表格展示列
       columns: [
-        { key: 0, label: '考生ID', visible: false },
+        { key: 0, label: '考生', visible: false },
         { key: 1, label: '招生年度', visible: true },
         { key: 2, label: '考生号', visible: true },
         { key: 3, label: '准考证号', visible: false },

@@ -2,6 +2,8 @@ package com.lz.manage.service;
 
 import java.util.List;
 import com.lz.manage.model.domain.EnrollSearch;
+import com.lz.manage.model.dto.enrollSearch.EnrollJoinSearch;
+import com.lz.manage.model.vo.enrollSearch.EnrollJoinResultVo;
 import com.lz.manage.model.vo.enrollSearch.EnrollSearchVo;
 import com.lz.manage.model.dto.enrollSearch.EnrollSearchQuery;
 
@@ -79,4 +81,14 @@ public interface IEnrollSearchService extends IService<EnrollSearch>
      * @return EnrollSearchVO集合
      */
     List<EnrollSearchVo> convertVoList(List<EnrollSearch> enrollSearchList);
+
+    /**
+     * 连表查询通知书和搜索信息
+     * @author YY
+     * @method  selectJoinEnrollList
+     * @date  2025/4/19 20:57
+     * @param enrollSearch 查询条件
+     * @return java.util.List<com.lz.manage.model.vo.enrollSearch.EnrollJoinResultVo>
+     **/
+    List<EnrollJoinResultVo> selectJoinEnrollList(EnrollJoinSearch enrollSearch);
 }

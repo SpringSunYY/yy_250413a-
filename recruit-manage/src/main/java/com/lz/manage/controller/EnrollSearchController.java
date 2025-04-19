@@ -3,6 +3,8 @@ package com.lz.manage.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.lz.manage.model.dto.enrollSearch.EnrollJoinSearch;
 import org.springframework.security.access.prepost.PreAuthorize;
 import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,15 +46,16 @@ public class EnrollSearchController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('manage:enrollSearch:list')")
     @GetMapping("/list")
-    public TableDataInfo list(EnrollSearchQuery enrollSearchQuery)
+    public TableDataInfo list(EnrollJoinSearch enrollSearch)
     {
-        EnrollSearch enrollSearch = EnrollSearchQuery.queryToObj(enrollSearchQuery);
+//        EnrollSearch enrollSearch = EnrollSearchQuery.queryToObj(enrollSearchQuery);
         startPage();
-        List<EnrollSearch> list = enrollSearchService.selectEnrollSearchList(enrollSearch);
-        List<EnrollSearchVo> listVo= list.stream().map(EnrollSearchVo::objToVo).collect(Collectors.toList());
-        TableDataInfo table = getDataTable(list);
-        table.setRows(listVo);
-        return table;
+//        List<EnrollSearch> list = enrollSearchService.selectEnrollSearchList(enrollSearch);
+//        List<EnrollSearchVo> listVo= list.stream().map(EnrollSearchVo::objToVo).collect(Collectors.toList());
+//        TableDataInfo table = getDataTable(list);
+//        table.setRows(listVo);
+//        return table;
+        return getDataTable(enrollSearchService.selectJoinEnrollList(enrollSearch));
     }
 
     /**

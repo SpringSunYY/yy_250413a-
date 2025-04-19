@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="考生ID" prop="stuEnrollId">
+      <el-form-item label="考生" prop="stuEnrollId">
         <el-select
           v-model="queryParams.stuEnrollId"
           filterable
@@ -160,7 +160,7 @@
 
     <el-table v-loading="loading" :data="enrollContactList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="考生ID" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
+      <el-table-column label="考生" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
       <el-table-column label="联络人ID" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
                        prop="taskUserId"
       />
@@ -275,7 +275,7 @@
     <!-- 添加或修改考生联络对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="考生ID" prop="stuEnrollId">
+        <el-form-item label="考生" prop="stuEnrollId">
           <el-select
             v-model="form.stuEnrollId"
             filterable
@@ -403,7 +403,7 @@ export default {
       baseUrl: process.env.VUE_APP_BASE_API,
       //表格展示列
       columns: [
-        { key: 0, label: '考生ID', visible: true },
+        { key: 0, label: '考生', visible: true },
         { key: 1, label: '联络人ID', visible: true },
         { key: 2, label: '联络人姓名', visible: true },
         { key: 3, label: '是否联络', visible: true },

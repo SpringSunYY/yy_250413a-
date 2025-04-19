@@ -12,6 +12,8 @@ import com.lz.common.utils.StringUtils;
 import javax.annotation.Resource;
 
 import com.lz.manage.model.domain.EnrollBasic;
+import com.lz.manage.model.dto.enrollSearch.EnrollJoinSearch;
+import com.lz.manage.model.vo.enrollSearch.EnrollJoinResultVo;
 import com.lz.manage.service.IEnrollBasicService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -166,6 +168,18 @@ public class EnrollSearchServiceImpl extends ServiceImpl<EnrollSearchMapper, Enr
             return Collections.emptyList();
         }
         return enrollSearchList.stream().map(EnrollSearchVo::objToVo).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EnrollJoinResultVo> selectJoinEnrollList(EnrollJoinSearch enrollSearch) {
+        List<EnrollJoinResultVo> enrollJoinResultVos = enrollSearchMapper.selectJoinEnrollList(enrollSearch);
+        for (EnrollJoinResultVo info : enrollJoinResultVos) {
+            EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(info.getStuEnrollId());
+            if (StringUtils.isNotNull(enrollBasic)) {
+                info.setStuEnrollName(enrollBasic.getStuName());
+            }
+        }
+        return enrollJoinResultVos;
     }
 
 }

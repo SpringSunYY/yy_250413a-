@@ -1,37 +1,150 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lz.manage.mapper.EnrollSearchMapper">
-    
+
     <resultMap type="EnrollSearch" id="EnrollSearchResult">
-        <result property="stuEnrollId"    column="stu_enroll_id"    />
-        <result property="stuNo"    column="stu_no"    />
-        <result property="classId"    column="class_id"    />
-        <result property="dormId"    column="dorm_id"    />
-        <result property="classTeacher"    column="class_teacher"    />
-        <result property="classTeacherContact"    column="class_teacher_contact"    />
-        <result property="classQq"    column="class_qq"    />
-        <result property="searchRemarks"    column="search_remarks"    />
+        <result property="stuEnrollId" column="stu_enroll_id"/>
+        <result property="stuNo" column="stu_no"/>
+        <result property="classId" column="class_id"/>
+        <result property="dormId" column="dorm_id"/>
+        <result property="classTeacher" column="class_teacher"/>
+        <result property="classTeacherContact" column="class_teacher_contact"/>
+        <result property="classQq" column="class_qq"/>
+        <result property="searchRemarks" column="search_remarks"/>
     </resultMap>
 
     <sql id="selectEnrollSearchVo">
-        select stu_enroll_id, stu_no, class_id, dorm_id, class_teacher, class_teacher_contact, class_qq, search_remarks from stu_enroll_search
+        select stu_enroll_id,
+               stu_no,
+               class_id,
+               dorm_id,
+               class_teacher,
+               class_teacher_contact,
+               class_qq,
+               search_remarks
+        from stu_enroll_search
     </sql>
+
+    <resultMap id="EnrollJoinResult" type="com.lz.manage.model.vo.enrollSearch.EnrollJoinResultVo">
+        <result column="stu_enroll_id" property="stuEnrollId"/>
+        <result column="stu_no" property="stuNo"/>
+        <result column="class_id" property="classId"/>
+        <result column="dorm_id" property="dormId"/>
+        <result column="class_teacher" property="classTeacher"/>
+        <result column="class_teacher_contact" property="classTeacherContact"/>
+        <result column="class_qq" property="classQq"/>
+        <result column="search_remarks" property="searchRemarks"/>
+        <result column="note_code" property="noteCode"/>
+        <result column="note_code_prefix" property="noteCodePrefix"/>
+        <result column="note_code_suffix" property="noteCodeSuffix"/>
+        <result column="plan_year" property="planYear"/>
+        <result column="province_name" property="provinceName"/>
+        <result column="stu_dept_name" property="stuDeptName"/>
+        <result column="stu_major" property="stuMajor"/>
+        <result column="stu_name" property="stuName"/>
+        <result column="is_enroll" property="isEnroll"/>
+        <result column="note_security_code" property="noteSecurityCode"/>
+        <result column="note_exp_code" property="noteExpCode"/>
+        <result column="note_print_status" property="notePrintStatus"/>
+        <result column="note_print_info" property="notePrintInfo"/>
+        <result column="note_print_time" property="notePrintTime"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+    <sql id="selectJoinEnrollVo">
+        select n.stu_enroll_id,
+               s.stu_no,
+               s.class_id,
+               s.dorm_id,
+               s.class_teacher,
+               s.class_teacher_contact,
+               s.class_qq,
+               s.search_remarks,
+               n.note_code,
+               n.note_code_prefix,
+               n.note_code_suffix,
+               n.plan_year,
+               n.province_name,
+               n.stu_dept_name,
+               n.stu_major,
+               n.stu_name,
+               n.is_enroll,
+               n.note_security_code,
+               n.note_exp_code,
+               n.note_print_status,
+               n.note_print_info,
+               n.note_print_time,
+               n.create_by,
+               n.create_time,
+               n.update_by,
+               n.update_time,
+               n.remark
+        from stu_enroll_note n
+                 left join stu_enroll_search s on s.stu_enroll_id = n.stu_enroll_id
+    </sql>
+
+    <select id="selectJoinEnrollList" parameterType="com.lz.manage.model.dto.enrollSearch.EnrollJoinSearch"
+            resultMap="EnrollJoinResult">
+        <include refid="selectJoinEnrollVo"/>
+        <where>
+            <if test="stuEnrollId != null and stuEnrollId != ''">and s.stu_enroll_id = #{stuEnrollId}</if>
+            <if test="stuNo != null and stuNo != ''">and s.stu_no = #{stuNo}</if>
+            <if test="classId != null and classId != ''">and s.class_id = #{classId}</if>
+            <if test="dormId != null and dormId != ''">and s.dorm_id = #{dormId}</if>
+            <if test="classTeacher != null and classTeacher != ''">and s.class_teacher = #{classTeacher}</if>
+            <if test="classTeacherContact != null and classTeacherContact != ''">and s.class_teacher_contact =
+                #{classTeacherContact}
+            </if>
+            <if test="classQq != null and classQq != ''">and s.class_qq = #{classQq}</if>
+
+            <if test="noteCode != null and noteCode != ''">and n.note_code = #{noteCode}</if>
+            <if test="planYear != null and planYear != ''">and n.plan_year = #{planYear}</if>
+            <if test="provinceName != null and provinceName != ''">and n.province_name like concat('%', #{provinceName},
+                '%')
+            </if>
+            <if test="stuDeptName != null and stuDeptName != ''">and n.stu_dept_name like concat('%', #{stuDeptName},
+                '%')
+            </if>
+            <if test="stuMajor != null and stuMajor != ''">and n.stu_major = #{stuMajor}</if>
+            <if test="stuName != null and stuName != ''">and n.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="isEnroll != null and isEnroll != ''">and n.is_enroll = #{isEnroll}</if>
+            <if test="notePrintStatus != null and notePrintStatus != ''">and n.note_print_status = #{notePrintStatus}
+            </if>
+            <if test="notePrintInfo != null and notePrintInfo != ''">and n.note_print_info = #{notePrintInfo}</if>
+            <if test="createBy != null and createBy != ''">and n.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and DATE_FORMAT(n.create_time, '%Y-%m-%d') between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">and n.update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and DATE_FORMAT(n.update_time, '%Y-%m-%d') between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
+        </where>
+    </select>
+
 
     <select id="selectEnrollSearchList" parameterType="EnrollSearch" resultMap="EnrollSearchResult">
         <include refid="selectEnrollSearchVo"/>
-        <where>  
-            <if test="stuEnrollId != null  and stuEnrollId != ''"> and stu_enroll_id = #{stuEnrollId}</if>
-            <if test="stuNo != null  and stuNo != ''"> and stu_no = #{stuNo}</if>
-            <if test="classId != null  and classId != ''"> and class_id = #{classId}</if>
-            <if test="dormId != null  and dormId != ''"> and dorm_id = #{dormId}</if>
-            <if test="classTeacher != null  and classTeacher != ''"> and class_teacher = #{classTeacher}</if>
-            <if test="classTeacherContact != null  and classTeacherContact != ''"> and class_teacher_contact = #{classTeacherContact}</if>
-            <if test="classQq != null  and classQq != ''"> and class_qq = #{classQq}</if>
+        <where>
+            <if test="stuEnrollId != null  and stuEnrollId != ''">and stu_enroll_id = #{stuEnrollId}</if>
+            <if test="stuNo != null  and stuNo != ''">and stu_no = #{stuNo}</if>
+            <if test="classId != null  and classId != ''">and class_id = #{classId}</if>
+            <if test="dormId != null  and dormId != ''">and dorm_id = #{dormId}</if>
+            <if test="classTeacher != null  and classTeacher != ''">and class_teacher = #{classTeacher}</if>
+            <if test="classTeacherContact != null  and classTeacherContact != ''">and class_teacher_contact =
+                #{classTeacherContact}
+            </if>
+            <if test="classQq != null  and classQq != ''">and class_qq = #{classQq}</if>
         </where>
     </select>
-    
+
     <select id="selectEnrollSearchByStuEnrollId" parameterType="String" resultMap="EnrollSearchResult">
         <include refid="selectEnrollSearchVo"/>
         where stu_enroll_id = #{stuEnrollId}
@@ -48,7 +161,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classTeacherContact != null">class_teacher_contact,</if>
             <if test="classQq != null">class_qq,</if>
             <if test="searchRemarks != null">search_remarks,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stuEnrollId != null">#{stuEnrollId},</if>
             <if test="stuNo != null">#{stuNo},</if>
@@ -58,7 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="classTeacherContact != null">#{classTeacherContact},</if>
             <if test="classQq != null">#{classQq},</if>
             <if test="searchRemarks != null">#{searchRemarks},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateEnrollSearch" parameterType="EnrollSearch">
@@ -76,11 +189,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteEnrollSearchByStuEnrollId" parameterType="String">
-        delete from stu_enroll_search where stu_enroll_id = #{stuEnrollId}
+        delete
+        from stu_enroll_search
+        where stu_enroll_id = #{stuEnrollId}
     </delete>
 
     <delete id="deleteEnrollSearchByStuEnrollIds" parameterType="String">
-        delete from stu_enroll_search where stu_enroll_id in 
+        delete from stu_enroll_search where stu_enroll_id in
         <foreach item="stuEnrollId" collection="array" open="(" separator="," close=")">
             #{stuEnrollId}
         </foreach>

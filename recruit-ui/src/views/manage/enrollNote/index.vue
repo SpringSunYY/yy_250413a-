@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="考生ID" prop="stuEnrollId">
+      <el-form-item label="考生" prop="stuEnrollId">
         <el-select
           v-model="queryParams.stuEnrollId"
           filterable
@@ -192,7 +192,7 @@
 
     <el-table v-loading="loading" :data="enrollNoteList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="考生ID" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
+      <el-table-column label="考生" align="center" v-if="columns[0].visible" prop="stuEnrollName"/>
       <el-table-column label="通知书编号" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
                        prop="noteCode"
       />
@@ -303,7 +303,7 @@
     <!-- 添加或修改通知书信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="考生ID" prop="stuEnrollId">
+        <el-form-item label="考生" prop="stuEnrollId">
           <el-select
             v-model="form.stuEnrollId"
             filterable
@@ -432,7 +432,7 @@ export default {
       },
       //表格展示列
       columns: [
-        { key: 0, label: '考生ID', visible: true },
+        { key: 0, label: '考生', visible: true },
         { key: 1, label: '通知书编号', visible: true },
         { key: 2, label: '通知书编号-前缀', visible: false },
         { key: 3, label: '通知书编号-后缀', visible: false },
