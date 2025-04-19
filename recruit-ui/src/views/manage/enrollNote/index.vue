@@ -403,7 +403,7 @@
       <PrintContent :student="student"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="printVisible = false">取 消</el-button>
-        <el-button type="primary" v-print="'#printContent'">打 印</el-button>
+        <el-button type="primary" v-print="'#printContent'" @click="print">打 印</el-button>
       </span>
     </el-dialog>
   </div>
@@ -505,6 +505,14 @@ export default {
     this.getEnrollInfoList()
   },
   methods: {
+    print(){
+      console.log('打印')
+      this.student.notePrintTime = new Date()
+      this.student.notePrintStatus = '0'
+      updateEnrollNote(this.student).then(response => {
+        this.getList()
+      })
+    },
     openPrint(row) {
       getEnrollNote(row.stuEnrollId).then(res => {
         console.log(res.data)
