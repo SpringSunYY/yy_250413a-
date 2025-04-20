@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import com.lz.common.exception.ServiceException;
+import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 
 import javax.annotation.Resource;
 
 import com.lz.common.utils.uuid.IdUtils;
+import com.lz.manage.model.domain.EnrollNote;
 import com.lz.manage.model.domain.EnrollPlan;
+import com.lz.manage.service.IEnrollNoteService;
 import com.lz.manage.service.IEnrollPlanService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -37,6 +40,9 @@ public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, Enrol
 
     @Resource
     private IEnrollPlanService enrollPlanService;
+
+    @Resource
+    private IEnrollNoteService enrollNoteService;
 
     //region mybatis代码
 
@@ -275,16 +281,90 @@ public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, Enrol
 
         //生成数据id
         for (int i = 0; i < basicList.size(); i++) {
-            EnrollBasic enrollBasic = basicList.get(i);
+            EnrollBasic info = basicList.get(i);
             Long id = IdUtils.snowflakeId();
-            enrollBasic.setStuEnrollId(id.toString());
+            info.setStuEnrollId(id.toString());
+
+            if (StringUtils.isEmpty(info.getEnrollYear())) {
+                return StringUtils.format("第{}条数据,年份不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getExamNum())) {
+                return StringUtils.format("第{}条数据,考生号不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getStuName())) {
+                return StringUtils.format("第{}条数据,姓名不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getSubjectSort())) {
+                return StringUtils.format("第{}条数据,科类不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getProvinceCode())) {
+                return StringUtils.format("第{}条数据,省份不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getExamTicketNum())) {
+                return StringUtils.format("第{}条数据,准考证号不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getEnrollDeptId())) {
+                return StringUtils.format("第{}条数据,录取学院不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getEnrollSpId())) {
+                return StringUtils.format("第{}条数据,录取专业不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getDocStatus())) {
+                return StringUtils.format("第{}条数据,档案状态不能为空", i + 1);
+            }
+            if (StringUtils.isEmpty(info.getSubjectSort())) {
+                return StringUtils.format("第{}条数据,科类不能为空", i + 1);
+            }
+        }
+        for (int i = 0; i < basicList.size(); i++) {
+            int index = i + 1;
+            EnrollBasic info = basicList.get(i);
+            //查询是否有此专业
+            EnrollPlan enrollPlan = new EnrollPlan();
+            enrollPlan.setPlanYear(info.getEnrollYear());
+            enrollPlan.setSpId(info.getEnrollSpId());
+            enrollPlan.setProvinceCode(info.getProvinceCode());
+            enrollPlan.setStuDeptId(info.getEnrollDeptId());
+            enrollPlan.setSubjectSortId(info.getSubjectSort());
+            EnrollPlan enrollPlanByProvince = enrollPlanService.getEnrollPlanByProvince(enrollPlan);
+            if (StringUtils.isNull(enrollPlanByProvince)) {
+                return StringUtils.format("第{}条数据,录取专业不存在", index);
+            }
+            info.setProvinceName(enrollPlanByProvince.getProvinceName());
+            info.setProvinceCode(enrollPlanByProvince.getProvinceCode());
+            info.setEnrollDeptName(enrollPlanByProvince.getStuDeptName());
+            info.setEnrollDeptId(enrollPlanByProvince.getStuDeptId());
+            info.setSubjectSortName(enrollPlanByProvince.getSubjectSortName());
+            info.setSubjectSort(enrollPlanByProvince.getSubjectSortId());
+            info.setEnrollSpName(enrollPlanByProvince.getSpName());
+            info.setEnrollSpId(enrollPlanByProvince.getSpId());
+            info.setEnrollYear(enrollPlanByProvince.getPlanYear());
         }
         //查询数据库是否有此数据
         List<EnrollBasic> enrollBasicList = this.list(new QueryWrapper<EnrollBasic>().in("exam_num", examNumList));
         if (StringUtils.isNotEmpty(enrollBasicList)) {
             return StringUtils.format("数据重复,考生号{}", enrollBasicList.get(0).getExamNum());
         }
+        Date createTime = new Date();
+        String username = SecurityUtils.getUsername();
+        List<EnrollNote> enrollNotes = basicList.stream()
+                .map(info -> {
+                    EnrollNote enrollNote = new EnrollNote();
+                    enrollNote.setStuEnrollId(info.getStuEnrollId());
+                    enrollNote.setProvinceName(info.getProvinceName());
+                    enrollNote.setStuDeptName(info.getEnrollDeptName());
+                    enrollNote.setStuMajor(info.getEnrollSpName());
+                    enrollNote.setStuName(info.getStuName());
+                    enrollNote.setIsEnroll(info.getDocStatus());
+                    enrollNote.setPlanYear(info.getEnrollYear());
+                    enrollNote.setCreateTime(createTime);
+                    enrollNote.setCreateBy(username);
+                    return enrollNote;
+                })
+                .collect(Collectors.toList());
         this.saveBatch(basicList);
+        //新增通知书
+        enrollNoteService.saveOrUpdateBatch(enrollNotes);
         return StringUtils.format("新增{}条数据成功", basicList.size());
     }
 

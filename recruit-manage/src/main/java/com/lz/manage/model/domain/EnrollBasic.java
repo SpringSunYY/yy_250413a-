@@ -63,7 +63,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 科类名称
      */
-    @Excel(name = "科类名称")
+    @Excel(name = "科类名称", type = Excel.Type.EXPORT)
     private String subjectSortName;
 
     /**
@@ -75,7 +75,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 省份名称
      */
-    @Excel(name = "省份名称")
+    @Excel(name = "省份名称", type = Excel.Type.EXPORT)
     private String provinceName;
 
     /**
@@ -249,7 +249,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 录取专业名称
      */
-    @Excel(name = "录取专业名称")
+    @Excel(name = "录取专业名称", type = Excel.Type.EXPORT)
     private String enrollSpName;
 
     /**
@@ -261,7 +261,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 录取学院名称
      */
-    @Excel(name = "录取学院名称")
+    @Excel(name = "录取学院名称", type = Excel.Type.EXPORT)
     private String enrollDeptName;
 
     /**
@@ -285,7 +285,7 @@ public class EnrollBasic implements Serializable {
     /**
      * 档案状态
      */
-    @Excel(name = "档案状态",readConverterExp = "0=未录取，1=已录取",prompt = "请填入未录取、已录取")
+    @Excel(name = "档案状态",readConverterExp = "0=未录取,1=已录取",prompt = "请填入未录取、已录取")
     private String docStatus;
 
     /**
