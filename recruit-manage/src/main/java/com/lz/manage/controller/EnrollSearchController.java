@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lz.manage.model.dto.enrollSearch.EnrollJoinSearch;
+import com.lz.manage.model.vo.enrollSearch.EnrollJoinResultVo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,11 +65,11 @@ public class EnrollSearchController extends BaseController
     @PreAuthorize("@ss.hasPermi('manage:enrollSearch:export')")
     @Log(title = "考生查询", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, EnrollSearchQuery enrollSearchQuery)
+    public void export(HttpServletResponse response, EnrollJoinSearch enrollSearch)
     {
-        EnrollSearch enrollSearch = EnrollSearchQuery.queryToObj(enrollSearchQuery);
-        List<EnrollSearch> list = enrollSearchService.selectEnrollSearchList(enrollSearch);
-        ExcelUtil<EnrollSearch> util = new ExcelUtil<EnrollSearch>(EnrollSearch.class);
+//        EnrollSearch enrollSearch = EnrollSearchQuery.queryToObj(enrollSearchQuery);
+        List<EnrollJoinResultVo> list = enrollSearchService.selectJoinEnrollList(enrollSearch);
+        ExcelUtil<EnrollJoinResultVo> util = new ExcelUtil<EnrollJoinResultVo>(EnrollJoinResultVo.class);
         util.exportExcel(response, list, "考生查询数据");
     }
 
