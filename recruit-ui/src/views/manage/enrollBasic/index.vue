@@ -453,17 +453,25 @@
         <el-form-item label="姓名" prop="stuName">
           <el-input v-model="form.stuName" placeholder="请输入姓名"/>
         </el-form-item>
-        <el-form-item label="科类" prop="subjectSort">
-          <el-input v-model="form.subjectSort" placeholder="请输入科类"/>
-        </el-form-item>
-        <el-form-item label="科类名称" prop="subjectSortName">
-          <el-input v-model="form.subjectSortName" placeholder="请输入科类名称"/>
-        </el-form-item>
-        <el-form-item label="省份编码" prop="provinceCode">
-          <el-input v-model="form.provinceCode" placeholder="请输入省份编码"/>
-        </el-form-item>
-        <el-form-item label="省份名称" prop="provinceName">
-          <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>
+        <el-form-item label="录取专业" prop="enrollSpId">
+          <el-select
+            style="width: 100%"
+            v-model="form.enrollSpId"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="地区代码" prop="areaCode">
           <el-input v-model="form.areaCode" placeholder="请输入地区代码"/>
@@ -520,43 +528,31 @@
           <el-input v-model="form.foreignLanguage" placeholder="请输入外语语种"/>
         </el-form-item>
         <el-form-item label="语文成绩" prop="coreChinese">
-          <el-input v-model="form.coreChinese" placeholder="请输入语文成绩"/>
+          <el-input-number :min="0" :max="150" :precision="2" v-model="form.coreChinese" placeholder="请输入语文成绩"/>
         </el-form-item>
         <el-form-item label="数学成绩" prop="coreMath">
-          <el-input v-model="form.coreMath" placeholder="请输入数学成绩"/>
+          <el-input-number :min="0" :max="150" :precision="2" v-model="form.coreMath" placeholder="请输入数学成绩"/>
         </el-form-item>
         <el-form-item label="外语成绩" prop="coreForeign">
-          <el-input v-model="form.coreForeign" placeholder="请输入外语成绩"/>
+          <el-input-number :min="0" :max="150" :precision="2" v-model="form.coreForeign" placeholder="请输入外语成绩"/>
         </el-form-item>
         <el-form-item label="综合成绩" prop="coreSyn">
-          <el-input v-model="form.coreSyn" placeholder="请输入综合成绩"/>
+          <el-input-number :min="0" :precision="2" v-model="form.coreSyn" placeholder="请输入综合成绩"/>
         </el-form-item>
         <el-form-item label="总成绩" prop="coreSum">
-          <el-input v-model="form.coreSum" placeholder="请输入总成绩"/>
+          <el-input-number :min="0" :precision="2" v-model="form.coreSum" placeholder="请输入总成绩"/>
         </el-form-item>
         <el-form-item label="加分" prop="coreAward">
-          <el-input v-model="form.coreAward" placeholder="请输入加分"/>
+          <el-input-number :min="0" :precision="2" v-model="form.coreAward" placeholder="请输入加分"/>
         </el-form-item>
         <el-form-item label="专业成绩" prop="coreSpecialty">
-          <el-input v-model="form.coreSpecialty" placeholder="请输入专业成绩"/>
+          <el-input-number :min="0" :precision="2" v-model="form.coreSpecialty" placeholder="请输入专业成绩"/>
         </el-form-item>
         <el-form-item label="投档成绩" prop="coreArchive">
-          <el-input v-model="form.coreArchive" placeholder="请输入投档成绩"/>
+          <el-input-number :min="0" :precision="2" v-model="form.coreArchive" placeholder="请输入投档成绩"/>
         </el-form-item>
         <el-form-item label="位次" prop="coreSortNum">
           <el-input v-model="form.coreSortNum" placeholder="请输入位次"/>
-        </el-form-item>
-        <el-form-item label="录取专业ID" prop="enrollSpId">
-          <el-input v-model="form.enrollSpId" placeholder="请输入录取专业ID"/>
-        </el-form-item>
-        <el-form-item label="录取专业名称" prop="enrollSpName">
-          <el-input v-model="form.enrollSpName" placeholder="请输入录取专业名称"/>
-        </el-form-item>
-        <el-form-item label="录取学院ID" prop="enrollDeptId">
-          <el-input v-model="form.enrollDeptId" placeholder="请输入录取学院ID"/>
-        </el-form-item>
-        <el-form-item label="录取学院名称" prop="enrollDeptName">
-          <el-input v-model="form.enrollDeptName" placeholder="请输入录取学院名称"/>
         </el-form-item>
         <el-form-item label="投档志愿" prop="enrollNum">
           <el-input v-model="form.enrollNum" placeholder="请输入投档志愿"/>
@@ -581,40 +577,124 @@
           <el-input v-model="form.eduLevel" placeholder="请输入学历等级"/>
         </el-form-item>
         <el-form-item label="第一志愿编码" prop="applySp1Id">
-          <el-input v-model="form.applySp1Id" placeholder="请输入第一志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第一志愿名称" prop="applySp1Name">
-          <el-input v-model="form.applySp1Name" placeholder="请输入第一志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp1Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="第二志愿编码" prop="applySp2Id">
-          <el-input v-model="form.applySp2Id" placeholder="请输入第二志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第二志愿名称" prop="applySp2Name">
-          <el-input v-model="form.applySp2Name" placeholder="请输入第二志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp2Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="第三志愿编码" prop="applySp3Id">
-          <el-input v-model="form.applySp3Id" placeholder="请输入第三志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第三志愿名称" prop="applySp3Name">
-          <el-input v-model="form.applySp3Name" placeholder="请输入第三志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp3Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="第四志愿编码" prop="applySp4Id">
-          <el-input v-model="form.applySp4Id" placeholder="请输入第四志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第四志愿名称" prop="applySp4Name">
-          <el-input v-model="form.applySp4Name" placeholder="请输入第四志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp4Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="第五志愿编码" prop="applySp5Id">
-          <el-input v-model="form.applySp5Id" placeholder="请输入第五志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第五志愿名称" prop="applySp5Name">
-          <el-input v-model="form.applySp5Name" placeholder="请输入第五志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp5Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="第六志愿编码" prop="applySp6Id">
-          <el-input v-model="form.applySp6Id" placeholder="请输入第六志愿编码"/>
-        </el-form-item>
-        <el-form-item label="第六志愿名称" prop="applySp6Name">
-          <el-input v-model="form.applySp6Name" placeholder="请输入第六志愿名称"/>
+          <el-select
+            style="width: 100%"
+            v-model="form.applySp6Id"
+            filterable
+            remote
+            :remote-method="selectPlanInfoList"
+            reserve-keyword
+            placeholder="请选择专业"
+            :loading="planLoading"
+          >
+            <el-option
+              v-for="item in planInfoList"
+              :key="item.planId"
+              :label="`${item.spName}-${item.stuDeptName}-${item.provinceName}`"
+              :value="item.planId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="录取备注" prop="enrollRemarks">
           <el-input v-model="form.enrollRemarks" placeholder="请输入录取备注"/>
@@ -669,12 +749,21 @@ import {
   updateEnrollBasic
 } from '@/api/manage/enrollBasic'
 import { getToken } from '@/utils/auth'
+import { listEnrollPlan } from '@/api/manage/enrollPlan'
 
 export default {
   name: 'EnrollBasic',
   dicts: ['is_enroll'],
   data() {
     return {
+      //招生计划相关信息
+      planInfoList: [],
+      planLoading: false,
+      planQueryParams: {
+        spName: '',
+        pageNum: 1,
+        pageSize: 100
+      },
       //表格展示列
       columns: [
         { key: 0, label: '考生', visible: false },
@@ -682,7 +771,7 @@ export default {
         { key: 2, label: '考生号', visible: true },
         { key: 3, label: '准考证号', visible: false },
         { key: 4, label: '姓名', visible: true },
-        { key: 5, label: '科类', visible: true },
+        { key: 5, label: '科类', visible: false },
         { key: 6, label: '科类名称', visible: true },
         { key: 7, label: '省份编码', visible: false },
         { key: 8, label: '省份名称', visible: true },
@@ -714,9 +803,9 @@ export default {
         { key: 34, label: '投档成绩', visible: false },
         { key: 35, label: '位次', visible: false },
         { key: 36, label: '录取专业ID', visible: false },
-        { key: 37, label: '录取专业名称', visible: false },
+        { key: 37, label: '录取专业名称', visible: true },
         { key: 38, label: '录取学院ID', visible: false },
-        { key: 39, label: '录取学院名称', visible: false },
+        { key: 39, label: '录取学院名称', visible: true },
         { key: 40, label: '投档志愿', visible: false },
         { key: 41, label: '服从调剂', visible: false },
         { key: 42, label: '录取批次', visible: false },
@@ -783,7 +872,54 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {},
+      rules: {
+        stuEnrollId: [
+          { required: true, message: '考生不能为空', trigger: 'blur' }
+        ],
+        enrollYear: [
+          { required: true, message: '招生年度不能为空', trigger: 'blur' }
+        ],
+        examNum: [
+          { required: true, message: '考生号不能为空', trigger: 'blur' }
+        ],
+        examTicketNum: [
+          { required: true, message: '准考证号不能为空', trigger: 'blur' }
+        ],
+        stuName: [
+          { required: true, message: '姓名不能为空', trigger: 'blur' }
+        ],
+        subjectSort: [
+          { required: true, message: '科类不能为空', trigger: 'blur' }
+        ],
+        provinceCode: [
+          { required: true, message: '省份名称不能为空', trigger: 'blur' }
+        ],
+        idCard: [
+          { required: true, message: '身份证号不能为空', trigger: 'blur' },
+          {
+            pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
+            message: '请输入正确的身份证号',
+            trigger: 'blur'
+          }
+        ],
+        homePhone: [
+          { required: true, message: '家庭电话不能为空', trigger: 'blur' },
+          {
+            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            message: '请输入正确的家庭电话',
+            trigger: 'blur'
+          }
+        ],
+        enrollSpId: [
+          { required: true, message: '录取专业不能为空', trigger: 'blur' }
+        ],
+        enrollDeptId: [
+          { required: true, message: '录取学院不能为空', trigger: 'blur' }
+        ],
+        docStatus: [
+          { required: true, message: '档案状态不能为空', trigger: 'blur' }
+        ]
+      },
       upload: {
         // 是否显示弹出层（用户导入）
         open: false,
@@ -806,8 +942,36 @@ export default {
   },
   created() {
     this.getList()
+    this.getPlanInfoList()
   },
   methods: {
+    /**
+     * 获取考生列表推荐
+     * @param query
+     */
+    selectPlanInfoList(query) {
+      if (query !== '') {
+        this.planLoading = true
+        this.planQueryParams.spName = query
+        setTimeout(() => {
+          this.getPlanInfoList()
+        }, 200)
+      } else {
+        this.planInfoList = []
+        this.planQueryParams.spName = null
+      }
+    },
+    /**
+     * 获取考生信息列表
+     */
+    getPlanInfoList() {
+      //添加查询参数
+      this.planInfoList = []
+      listEnrollPlan(this.planQueryParams).then(res => {
+        this.planInfoList = res?.rows
+        this.planLoading = false
+      })
+    },
     /** 查询录取信息列表 */
     getList() {
       this.loading = true

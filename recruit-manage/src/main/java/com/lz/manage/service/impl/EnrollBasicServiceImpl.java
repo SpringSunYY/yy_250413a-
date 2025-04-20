@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.lz.common.exception.ServiceException;
 import com.lz.common.utils.StringUtils;
 
 import javax.annotation.Resource;
 
 import com.lz.common.utils.uuid.IdUtils;
+import com.lz.manage.model.domain.EnrollPlan;
+import com.lz.manage.service.IEnrollPlanService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,6 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, EnrollBasic> implements IEnrollBasicService {
     @Resource
     private EnrollBasicMapper enrollBasicMapper;
+
+    @Resource
+    private IEnrollPlanService enrollPlanService;
 
     //region mybatis代码
 
@@ -64,9 +70,80 @@ public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, Enrol
      */
     @Override
     public int insertEnrollBasic(EnrollBasic enrollBasic) {
+        checkMajor(enrollBasic);
         Long id = IdUtils.snowflakeId();
         enrollBasic.setStuEnrollId(id.toString());
         return enrollBasicMapper.insertEnrollBasic(enrollBasic);
+    }
+
+    private void checkMajor(EnrollBasic enrollBasic) {
+        //如果省份编码、专业、学院、科类、年度存在
+        if (StringUtils.isNotEmpty(enrollBasic.getEnrollSpId())) {
+            EnrollPlan enrollPlan = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getEnrollSpId());
+            enrollBasic.setProvinceName(enrollPlan.getProvinceName());
+            enrollBasic.setProvinceCode(enrollPlan.getProvinceCode());
+            enrollBasic.setEnrollDeptName(enrollPlan.getStuDeptName());
+            enrollBasic.setEnrollDeptId(enrollPlan.getStuDeptId());
+            enrollBasic.setSubjectSortName(enrollPlan.getSubjectSortName());
+            enrollBasic.setSubjectSort(enrollPlan.getSubjectSortId());
+            enrollBasic.setEnrollSpName(enrollPlan.getSpName());
+            enrollBasic.setEnrollSpId(enrollPlan.getSpId());
+            enrollBasic.setEnrollYear(enrollPlan.getPlanYear());
+        }
+        //如果第一志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp1Id())) {
+            EnrollPlan enrollPlanBySp1 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp1Id());
+            if (StringUtils.isNull(enrollPlanBySp1)) {
+                throw new ServiceException("第一志愿专业不存在");
+            }
+            enrollBasic.setApplySp1Id(enrollPlanBySp1.getSpId());
+            enrollBasic.setApplySp1Name(enrollPlanBySp1.getSpName());
+        }
+        //如果第二志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp2Id())) {
+            EnrollPlan enrollPlanBySp2 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp2Id());
+            if (StringUtils.isNull(enrollPlanBySp2)) {
+                throw new ServiceException("第二志愿专业不存在");
+            }
+            enrollBasic.setApplySp2Id(enrollPlanBySp2.getSpId());
+            enrollBasic.setApplySp2Name(enrollPlanBySp2.getSpName());
+        }
+        //如果第三志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp3Id())) {
+            EnrollPlan enrollPlanBySp3 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp3Id());
+            if (StringUtils.isNull(enrollPlanBySp3)) {
+                throw new ServiceException("第三志愿专业不存在");
+            }
+            enrollBasic.setApplySp3Id(enrollPlanBySp3.getSpId());
+            enrollBasic.setApplySp3Name(enrollPlanBySp3.getSpName());
+        }
+        //如果第四志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp4Id())) {
+            EnrollPlan enrollPlanBySp4 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp4Id());
+            if (StringUtils.isNull(enrollPlanBySp4)) {
+                throw new ServiceException("第四志愿专业不存在");
+            }
+            enrollBasic.setApplySp4Id(enrollPlanBySp4.getSpId());
+            enrollBasic.setApplySp4Name(enrollPlanBySp4.getSpName());
+        }
+        //如果第五志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp5Id())) {
+            EnrollPlan enrollPlanBySp5 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp5Id());
+            if (StringUtils.isNull(enrollPlanBySp5)) {
+                throw new ServiceException("第五志愿专业不存在");
+            }
+            enrollBasic.setApplySp5Id(enrollPlanBySp5.getSpId());
+            enrollBasic.setApplySp5Name(enrollPlanBySp5.getSpName());
+        }
+        //如果第六志愿存在
+        if (StringUtils.isNotEmpty(enrollBasic.getApplySp6Id())) {
+            EnrollPlan enrollPlanBySp6 = enrollPlanService.selectEnrollPlanByPlanId(enrollBasic.getApplySp6Id());
+            if (StringUtils.isNull(enrollPlanBySp6)) {
+                throw new ServiceException("第六志愿专业不存在");
+            }
+            enrollBasic.setApplySp6Id(enrollPlanBySp6.getSpId());
+            enrollBasic.setApplySp6Name(enrollPlanBySp6.getSpName());
+        }
     }
 
     /**
@@ -77,6 +154,7 @@ public class EnrollBasicServiceImpl extends ServiceImpl<EnrollBasicMapper, Enrol
      */
     @Override
     public int updateEnrollBasic(EnrollBasic enrollBasic) {
+        checkMajor(enrollBasic);
         return enrollBasicMapper.updateEnrollBasic(enrollBasic);
     }
 

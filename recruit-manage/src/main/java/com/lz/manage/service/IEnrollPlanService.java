@@ -41,34 +41,15 @@ public interface IEnrollPlanService extends IService<EnrollPlan>
     public int insertEnrollPlan(EnrollPlan enrollPlan);
 
     /**
-     * 根据年度和系部D查询招生计划
+     * 根据年度和省份ID查询招生计划，省份、专业、系部、年度
      * @author YY
-     * @method  getEnrollPlanByDept
-     * @date  2025/4/20 21:15
+     * @method  getEnrollPlanByProvince
+     * @date  2025/4/20 21:27
      * @param enrollPlan
      * @return com.lz.manage.model.domain.EnrollPlan
      **/
-    EnrollPlan getEnrollPlanByDept(EnrollPlan enrollPlan);
+    EnrollPlan getEnrollPlanByProvince(EnrollPlan enrollPlan);
 
-    /**
-     * 根据年度和科类ID查询招生计划
-     * @author YY
-     * @method  getENrollPlanBySubject
-     * @date  2025/4/20 21:11
-     * @param enrollPlan 查询条件
-     * @return com.lz.manage.model.domain.EnrollPlan
-     **/
-    EnrollPlan getENrollPlanBySubject(EnrollPlan enrollPlan);
-
-    /**
-     * 根据年度和专业ID查询招生计划
-     * @author YY
-     * @method  getEnrollPlanByMayor
-     * @date  2025/4/20 21:11
-     * @param enrollPlan 查询条件
-     * @return com.lz.manage.model.domain.EnrollPlan
-     **/
-    EnrollPlan getEnrollPlanByMayor(EnrollPlan enrollPlan);
 
     /**
      * 修改招生计划

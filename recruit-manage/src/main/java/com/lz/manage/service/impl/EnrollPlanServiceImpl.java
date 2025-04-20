@@ -71,20 +71,10 @@ public class EnrollPlanServiceImpl extends ServiceImpl<EnrollPlanMapper, EnrollP
      */
     @Override
     public int insertEnrollPlan(EnrollPlan enrollPlan) {
-        //校验招生计划年度和专业代码是否唯一
-        EnrollPlan major = getEnrollPlanByMayor(enrollPlan);
-        if (StringUtils.isNotNull(major)) {
-            throw new ServiceException("该年度已经存在此专业");
-        }
-        //校验招生计划年度和科类ID是否唯一
-        EnrollPlan eNrollPlanBySubject = getENrollPlanBySubject(enrollPlan);
-        if (StringUtils.isNotNull(eNrollPlanBySubject)) {
-            throw new ServiceException("该年度科类ID已经存在");
-        }
-        //校验招生计划年度和系部ID是否唯一
-        EnrollPlan eNrollPlanByDept = getEnrollPlanByDept(enrollPlan);
-        if (StringUtils.isNotNull(eNrollPlanByDept)) {
-            throw new ServiceException("该年度系部ID已经存在");
+        //校验招生计划年度和省份编码是否唯一
+        EnrollPlan eNrollPlanByProvince = getEnrollPlanByProvince(enrollPlan);
+        if (StringUtils.isNotNull(eNrollPlanByProvince)) {
+            throw new ServiceException("该年度此省专业已存在");
         }
         enrollPlan.setPlanId(IdUtils.snowflakeId().toString());
         enrollPlan.setCreateBy(SecurityUtils.getUsername());
@@ -93,25 +83,15 @@ public class EnrollPlanServiceImpl extends ServiceImpl<EnrollPlanMapper, EnrollP
     }
 
     @Override
-    public EnrollPlan getEnrollPlanByDept(EnrollPlan enrollPlan) {
+    public EnrollPlan getEnrollPlanByProvince(EnrollPlan enrollPlan) {
         return this.getOne(new LambdaQueryWrapper<EnrollPlan>()
                 .eq(EnrollPlan::getPlanYear, enrollPlan.getPlanYear())
-                .eq(EnrollPlan::getStuDeptId, enrollPlan.getStuDeptId()));
-    }
-
-    @Override
-    public EnrollPlan getENrollPlanBySubject(EnrollPlan enrollPlan) {
-        return this.getOne(new LambdaQueryWrapper<EnrollPlan>()
-                .eq(EnrollPlan::getPlanYear, enrollPlan.getPlanYear())
+                .eq(EnrollPlan::getProvinceCode, enrollPlan.getProvinceCode())
+                .eq(EnrollPlan::getSpId, enrollPlan.getSpId())
+                .eq(EnrollPlan::getStuDeptId, enrollPlan.getStuDeptId())
                 .eq(EnrollPlan::getSubjectSortId, enrollPlan.getSubjectSortId()));
     }
 
-    @Override
-    public EnrollPlan getEnrollPlanByMayor(EnrollPlan enrollPlan) {
-        return this.getOne(new LambdaQueryWrapper<EnrollPlan>()
-                .eq(EnrollPlan::getPlanYear, enrollPlan.getPlanYear())
-                .eq(EnrollPlan::getSpId, enrollPlan.getSpId()));
-    }
 
     /**
      * 修改招生计划
@@ -123,19 +103,11 @@ public class EnrollPlanServiceImpl extends ServiceImpl<EnrollPlanMapper, EnrollP
     public int updateEnrollPlan(EnrollPlan enrollPlan) {
         EnrollPlan enrollPlanDb = this.selectEnrollPlanByPlanId(enrollPlan.getPlanId());
         if (StringUtils.isNull(enrollPlanDb)) {
-            throw new ServiceException("数据不存在");
+            throw new ServiceException("该招生计划不存在");
         }
-        EnrollPlan planByDept = this.getEnrollPlanByDept(enrollPlan);
-        if (StringUtils.isNotNull(planByDept) && !planByDept.getPlanId().equals(enrollPlan.getPlanId())) {
-            throw new ServiceException("该年度系部ID已经存在");
-        }
-        EnrollPlan planByMayor = this.getEnrollPlanByMayor(enrollPlan);
-        if (StringUtils.isNotNull(planByMayor) && !planByMayor.getPlanId().equals(enrollPlan.getPlanId())) {
-            throw new ServiceException("该年度已经存在此专业");
-        }
-        EnrollPlan bySubject = this.getENrollPlanBySubject(enrollPlan);
-        if (StringUtils.isNotNull(bySubject) && !bySubject.getPlanId().equals(enrollPlan.getPlanId())) {
-            throw new ServiceException("该年度科类ID已经存在");
+        EnrollPlan planByProvince = this.getEnrollPlanByProvince(enrollPlan);
+        if (StringUtils.isNotNull(planByProvince) && !planByProvince.getPlanId().equals(enrollPlan.getPlanId())) {
+            throw new ServiceException("该年度此省专业已存在");
         }
         enrollPlan.setUpdateBy(SecurityUtils.getUsername());
         enrollPlan.setUpdateTime(DateUtils.getNowDate());
