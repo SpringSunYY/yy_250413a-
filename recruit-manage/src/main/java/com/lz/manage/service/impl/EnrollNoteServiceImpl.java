@@ -83,10 +83,7 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
     @Override
     public int insertEnrollNote(EnrollNote enrollNote) {
         //查询是否有此学生
-        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollNote.getStuEnrollId());
-        if (StringUtils.isNull(enrollBasic)) {
-            throw new RuntimeException("该考生不存在");
-        }
+        checkStudent(enrollNote);
         enrollNote.setCreateTime(DateUtils.getNowDate());
         return enrollNoteMapper.insertEnrollNote(enrollNote);
     }
@@ -99,11 +96,8 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
      */
     @Override
     public int updateEnrollNote(EnrollNote enrollNote) {
-        //查询是否有此学生
-        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollNote.getStuEnrollId());
-        if (StringUtils.isNull(enrollBasic)) {
-            throw new RuntimeException("该考生不存在");
-        }
+        //校验学生
+        checkStudent(enrollNote);
         //查询是否存在信息
         EnrollNote old = enrollNoteMapper.selectEnrollNoteByStuEnrollId(enrollNote.getStuEnrollId());
         if (StringUtils.isNull(old)) {
@@ -113,6 +107,20 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
         enrollNote.setUpdateBy(SecurityUtils.getUsername());
         enrollNote.setUpdateTime(DateUtils.getNowDate());
         return this.saveOrUpdate(enrollNote) ? 1 : 0;
+    }
+
+    private void checkStudent(EnrollNote enrollNote) {
+        //查询是否有此学生
+        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollNote.getStuEnrollId());
+        if (StringUtils.isNull(enrollBasic)) {
+            throw new RuntimeException("该考生不存在");
+        }
+        enrollNote.setStuName(enrollBasic.getStuName());
+        enrollNote.setIsEnroll(enrollBasic.getDocStatus());
+        enrollNote.setPlanYear(enrollBasic.getEnrollYear());
+        enrollNote.setProvinceName(enrollBasic.getProvinceName());
+        enrollNote.setStuDeptName(enrollBasic.getEnrollDeptName());
+        enrollNote.setStuMajor(enrollBasic.getEnrollSpName());
     }
 
     /**

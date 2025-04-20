@@ -331,31 +331,31 @@
         <el-form-item label="后缀" prop="noteCodeSuffix">
           <el-input v-model="form.noteCodeSuffix" placeholder="请输入通知书编号-后缀"/>
         </el-form-item>
-        <el-form-item label="招生年度" prop="planYear">
-          <el-input-number :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>
-        </el-form-item>
-        <el-form-item label="省份名称" prop="provinceName">
-          <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>
-        </el-form-item>
-        <el-form-item label="录取院校" prop="stuDeptName">
-          <el-input v-model="form.stuDeptName" placeholder="请输入录取院校"/>
-        </el-form-item>
-        <el-form-item label="录取专业" prop="stuMajor">
-          <el-input v-model="form.stuMajor" placeholder="请输入录取专业"/>
-        </el-form-item>
-        <el-form-item label="学生姓名" prop="stuName">
-          <el-input v-model="form.stuName" placeholder="请输入学生姓名"/>
-        </el-form-item>
-        <el-form-item label="是否录取" prop="isEnroll">
-          <el-radio-group v-model="form.isEnroll">
-            <el-radio
-              v-for="dict in dict.type.is_enroll"
-              :key="dict.value"
-              :label="dict.value"
-            >{{ dict.label }}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
+<!--        <el-form-item label="招生年度" prop="planYear">-->
+<!--          <el-input-number :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="省份名称" prop="provinceName">-->
+<!--          <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="录取院校" prop="stuDeptName">-->
+<!--          <el-input v-model="form.stuDeptName" placeholder="请输入录取院校"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="录取专业" prop="stuMajor">-->
+<!--          <el-input v-model="form.stuMajor" placeholder="请输入录取专业"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="学生姓名" prop="stuName">-->
+<!--          <el-input v-model="form.stuName" placeholder="请输入学生姓名"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="是否录取" prop="isEnroll">-->
+<!--          <el-radio-group v-model="form.isEnroll">-->
+<!--            <el-radio-->
+<!--              v-for="dict in dict.type.is_enroll"-->
+<!--              :key="dict.value"-->
+<!--              :label="dict.value"-->
+<!--            >{{ dict.label }}-->
+<!--            </el-radio>-->
+<!--          </el-radio-group>-->
+<!--        </el-form-item>-->
         <el-form-item label="通知书防伪码" prop="noteSecurityCode">
           <el-input v-model="form.noteSecurityCode" placeholder="请输入通知书防伪码"/>
         </el-form-item>
