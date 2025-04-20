@@ -187,6 +187,16 @@
         >导出
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          icon="el-icon-upload2"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['manage:enrollNote:import']"
+        >导入
+        </el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
@@ -331,31 +341,31 @@
         <el-form-item label="后缀" prop="noteCodeSuffix">
           <el-input v-model="form.noteCodeSuffix" placeholder="请输入通知书编号-后缀"/>
         </el-form-item>
-<!--        <el-form-item label="招生年度" prop="planYear">-->
-<!--          <el-input-number :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="省份名称" prop="provinceName">-->
-<!--          <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="录取院校" prop="stuDeptName">-->
-<!--          <el-input v-model="form.stuDeptName" placeholder="请输入录取院校"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="录取专业" prop="stuMajor">-->
-<!--          <el-input v-model="form.stuMajor" placeholder="请输入录取专业"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="学生姓名" prop="stuName">-->
-<!--          <el-input v-model="form.stuName" placeholder="请输入学生姓名"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="是否录取" prop="isEnroll">-->
-<!--          <el-radio-group v-model="form.isEnroll">-->
-<!--            <el-radio-->
-<!--              v-for="dict in dict.type.is_enroll"-->
-<!--              :key="dict.value"-->
-<!--              :label="dict.value"-->
-<!--            >{{ dict.label }}-->
-<!--            </el-radio>-->
-<!--          </el-radio-group>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="招生年度" prop="planYear">-->
+        <!--          <el-input-number :min="0" :max="9999" v-model="form.planYear" placeholder="请输入招生年度"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="省份名称" prop="provinceName">-->
+        <!--          <el-input v-model="form.provinceName" placeholder="请输入省份名称"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="录取院校" prop="stuDeptName">-->
+        <!--          <el-input v-model="form.stuDeptName" placeholder="请输入录取院校"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="录取专业" prop="stuMajor">-->
+        <!--          <el-input v-model="form.stuMajor" placeholder="请输入录取专业"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="学生姓名" prop="stuName">-->
+        <!--          <el-input v-model="form.stuName" placeholder="请输入学生姓名"/>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="是否录取" prop="isEnroll">-->
+        <!--          <el-radio-group v-model="form.isEnroll">-->
+        <!--            <el-radio-->
+        <!--              v-for="dict in dict.type.is_enroll"-->
+        <!--              :key="dict.value"-->
+        <!--              :label="dict.value"-->
+        <!--            >{{ dict.label }}-->
+        <!--            </el-radio>-->
+        <!--          </el-radio-group>-->
+        <!--        </el-form-item>-->
         <el-form-item label="通知书防伪码" prop="noteSecurityCode">
           <el-input v-model="form.noteSecurityCode" placeholder="请输入通知书防伪码"/>
         </el-form-item>
@@ -406,6 +416,35 @@
         <el-button type="primary" v-print="'#printContent'" @click="print">打 印</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px">
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="upload.headers"
+        :action="upload.url"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
+        <div class="el-upload__tip" slot="tip">
+          <el-link type="info" style="font-size:12px" @click="importTemplate">下载模板</el-link>
+        </div>
+        <div class="el-upload__tip" style="color:red" slot="tip">提示：仅允许导入“xls”或“xlsx”格式文件！</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -413,6 +452,7 @@
 import { listEnrollNote, getEnrollNote, delEnrollNote, addEnrollNote, updateEnrollNote } from '@/api/manage/enrollNote'
 import { listEnrollBasic } from '@/api/manage/enrollBasic'
 import PrintContent from '@/components/PrintContent/index.vue'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'EnrollNote',
@@ -497,7 +537,25 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {}
+      rules: {},
+      upload: {
+        // 是否显示弹出层（用户导入）
+        open: false,
+        // 弹出层标题（用户导入）
+        title:
+          '',
+        // 是否禁用上传
+        isUploading:
+          false,
+        // 设置上传的请求头部
+        headers:
+          {
+            Authorization: 'Bearer ' + getToken()
+          }
+        ,
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + '/manage/enrollNote/importData'
+      }
     }
   },
   created() {
@@ -505,7 +563,7 @@ export default {
     this.getEnrollInfoList()
   },
   methods: {
-    print(){
+    print() {
       console.log('打印')
       this.student.notePrintTime = new Date()
       this.student.notePrintStatus = '0'
@@ -676,6 +734,31 @@ export default {
       this.download('manage/enrollNote/export', {
         ...this.queryParams
       }, `enrollNote_${new Date().getTime()}.xlsx`)
+    },
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = '通知书信息导入'
+      this.upload.open = true
+    },
+    /** 下载模板操作 */
+    importTemplate() {
+      this.download('manage/enrollNote/importTemplate', {}, `enrollNote_template_${new Date().getTime()}.xlsx`)
+    },
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$alert(response.msg, '导入结果', { dangerouslyUseHTMLString: true })
+      this.getList()
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.$refs.upload.submit()
     }
   }
 }

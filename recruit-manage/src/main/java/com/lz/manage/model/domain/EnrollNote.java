@@ -57,37 +57,37 @@ public class EnrollNote implements Serializable {
     /**
      * 招生年度
      */
-    @Excel(name = "招生年度")
+    @Excel(name = "招生年度",type = Excel.Type.EXPORT)
     private String planYear;
 
     /**
      * 省份名称
      */
-    @Excel(name = "省份名称")
+    @Excel(name = "省份名称",type = Excel.Type.EXPORT)
     private String provinceName;
 
     /**
      * 录取院校
      */
-    @Excel(name = "录取院校")
+    @Excel(name = "录取院校",type = Excel.Type.EXPORT)
     private String stuDeptName;
 
     /**
      * 录取专业
      */
-    @Excel(name = "录取专业")
+    @Excel(name = "录取专业",type = Excel.Type.EXPORT)
     private String stuMajor;
 
     /**
      * 学生姓名
      */
-    @Excel(name = "学生姓名")
+    @Excel(name = "学生姓名",type = Excel.Type.EXPORT)
     private String stuName;
 
     /**
      * 是否录取
      */
-    @Excel(name = "是否录取")
+    @Excel(name = "是否录取",readConverterExp = "0=是,1=否",prompt = "只能填入是、否")
     private String isEnroll;
 
     /**
@@ -105,7 +105,7 @@ public class EnrollNote implements Serializable {
     /**
      * 通知书打印
      */
-    @Excel(name = "通知书打印")
+    @Excel(name = "通知书打印",readConverterExp = "0=是,1=否",prompt = "只能填入是、否")
     private String notePrintStatus;
 
     /**

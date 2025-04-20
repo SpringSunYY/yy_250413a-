@@ -279,7 +279,7 @@
         <el-form-item label="辅导员" prop="classTeacher">
           <el-input v-model="form.classTeacher" placeholder="请输入辅导员"/>
         </el-form-item>
-        <el-form-item label="辅导员联系方式" prop="classTeacherContact">
+        <el-form-item label="联系方式" prop="classTeacherContact">
           <el-input v-model="form.classTeacherContact" placeholder="请输入辅导员联系方式"/>
         </el-form-item>
         <el-form-item label="QQ群" prop="classQq">
@@ -376,7 +376,16 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {}
+      rules: {
+        classTeacherContact:[
+          { required: false, message: '辅导员联系方式不能为空', trigger: 'blur' },
+          {
+            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            message: '请输入正确的手机号码',
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   created() {

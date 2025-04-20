@@ -39,6 +39,7 @@ import com.lz.manage.model.dto.enrollNote.EnrollNoteEdit;
 import com.lz.manage.service.IEnrollNoteService;
 import com.lz.common.utils.poi.ExcelUtil;
 import com.lz.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 通知书信息Controller
@@ -156,5 +157,22 @@ public class EnrollNoteController extends BaseController {
                 throw new CaptchaException();
             }
         }
+    }
+
+    @PreAuthorize("@ss.hasPermi('manage:enrollNote:import')")
+    @Log(title = "导入通知书信息", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file) throws Exception {
+        ExcelUtil<EnrollNote> util = new ExcelUtil<EnrollNote>(EnrollNote.class);
+        List<EnrollNote> basicList = util.importExcel(file.getInputStream());
+        String message = enrollNoteService.importEnrollNode(basicList);
+        return success(message);
+    }
+
+    @PreAuthorize("@ss.hasPermi('manage:enrollNote:import')")
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil<EnrollNote> util = new ExcelUtil<EnrollNote>(EnrollNote.class);
+        util.importTemplateExcel(response, "通知书数据");
     }
 }

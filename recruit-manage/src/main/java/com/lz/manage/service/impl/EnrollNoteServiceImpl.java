@@ -215,11 +215,52 @@ public class EnrollNoteServiceImpl extends ServiceImpl<EnrollNoteMapper, EnrollN
                     .eq(EnrollBasic::getStuName, enrollBasic.getStuName())
                     .eq(EnrollBasic::getExamNum, enrollBasic.getExamNum())
                     .eq(EnrollBasic::getIdCard, enrollBasic.getIdCard()));
-           stuEnrollId = basic.getStuEnrollId();
+            stuEnrollId = basic.getStuEnrollId();
         } catch (Exception e) {
             throw new ServiceException("查询失败，没有此学生");
         }
         return enrollNoteMapper.selectEnrollNoteByStuEnrollId(stuEnrollId);
+    }
+
+    @Override
+    public String importEnrollNode(List<EnrollNote> basicList) {
+        // 校验导入数据
+        if (StringUtils.isEmpty(basicList)) {
+            return "数据为空";
+        }
+        //判断数据是否重复
+        Set<String> examNumList = basicList.stream().map(EnrollNote::getStuEnrollId).collect(Collectors.toSet());
+        if (examNumList.size() != basicList.size()) {
+            return "数据重复,请检查";
+        }
+        for (int i = 0; i < basicList.size(); i++) {
+            int index = i + 1;
+            EnrollNote info = basicList.get(i);
+            if (StringUtils.isNull(info.getStuEnrollId())) {
+                return "第" + index + "行,考生ID不能为空";
+            }
+        }
+        Date nowDate = DateUtils.getNowDate();
+        String username = SecurityUtils.getUsername();
+        for (int i = 0; i < basicList.size(); i++) {
+            int index = i + 1;
+            EnrollNote info = basicList.get(i);
+            EnrollNote enrollNote = this.selectEnrollNoteByStuEnrollId(info.getStuEnrollId());
+            if (StringUtils.isNotNull(enrollNote)) {
+                return "第" + index + "行,考生ID已存在";
+            }
+            EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(info.getStuEnrollId());
+            info.setStuName(enrollBasic.getStuName());
+            info.setIsEnroll(enrollBasic.getDocStatus());
+            info.setPlanYear(enrollBasic.getEnrollYear());
+            info.setProvinceName(enrollBasic.getProvinceName());
+            info.setStuDeptName(enrollBasic.getEnrollDeptName());
+            info.setStuMajor(enrollBasic.getEnrollSpName());
+            info.setCreateBy(username);
+            info.setCreateTime(nowDate);
+        }
+        this.saveBatch(basicList);
+        return StringUtils.format("新增{}条数据成功", basicList.size());
     }
 
 }

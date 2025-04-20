@@ -94,4 +94,15 @@ public interface IEnrollNoteService extends IService<EnrollNote> {
      * return: com.lz.manage.model.domain.EnrollNote
      **/
     EnrollNote stuQuery(EnrollBasic enrollBasic);
+
+    /**
+     * 导入通知书信息
+     *
+     * @param basicList
+     * @return java.lang.String
+     * @author YY
+     * @method importEnrollNode
+     * @date 2025/4/20 23:44
+     **/
+    String importEnrollNode(List<EnrollNote> basicList);
 }
