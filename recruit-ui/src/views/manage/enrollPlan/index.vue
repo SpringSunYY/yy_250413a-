@@ -385,9 +385,36 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        planYear: [
+          { required: true, message: '计划年度不能为空', trigger: 'blur' }
+        ],
         spId: [
           { required: true, message: '专业代码不能为空', trigger: 'blur' }
-        ]
+        ],
+        spName: [
+          { required: true, message: '专业名称不能为空', trigger: 'blur' }
+        ],
+        stuDeptId: [
+          { required: true, message: '系部id不能为空', trigger: 'blur' }
+        ],
+        stuDeptName: [
+          { required: true, message: '系部名称不能为空', trigger: 'blur' }
+        ],
+        spLength: [
+          { required: true, message: '学制不能为空', trigger: 'blur' }
+        ],
+        subjectSortId: [
+          { required: true, message: '科类id不能为空', trigger: 'blur' }
+        ],
+        subjectSortName: [
+          { required: true, message: '科类名称不能为空', trigger: 'blur' }
+        ],
+        provinceCode: [
+          { required: true, message: '省份编码不能为空', trigger: 'blur' }
+        ],
+        provinceName: [
+          { required: true, message: '省份名称不能为空', trigger: 'blur' }
+        ],
       }
     }
   },
