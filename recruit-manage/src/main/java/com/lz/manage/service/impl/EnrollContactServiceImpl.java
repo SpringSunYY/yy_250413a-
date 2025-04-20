@@ -64,6 +64,9 @@ public class EnrollContactServiceImpl extends ServiceImpl<EnrollContactMapper, E
      */
     @Override
     public List<EnrollContact> selectEnrollContactList(EnrollContact enrollContact) {
+        if (!SecurityUtils.hasPermi("manage:enrollContact:all")) {
+            enrollContact.setCreateBy(SecurityUtils.getUsername());
+        }
         List<EnrollContact> enrollContacts = enrollContactMapper.selectEnrollContactList(enrollContact);
         for (EnrollContact info : enrollContacts) {
             EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(info.getStuEnrollId());
@@ -93,8 +96,9 @@ public class EnrollContactServiceImpl extends ServiceImpl<EnrollContactMapper, E
         if (StringUtils.isNull(enrollBasic)) {
             throw new RuntimeException("该考生不存在");
         }
+        enrollContact.setTaskUserId(SecurityUtils.getUserId().toString());
+        enrollContact.setTaskUserName(SecurityUtils.getUsername());
         enrollContact.setCreateBy(SecurityUtils.getUsername());
-        enrollContact.setContactId(IdUtils.snowflakeId().toString());
         enrollContact.setCreateTime(DateUtils.getNowDate());
         return enrollContactMapper.insertEnrollContact(enrollContact);
     }
@@ -112,9 +116,12 @@ public class EnrollContactServiceImpl extends ServiceImpl<EnrollContactMapper, E
             throw new RuntimeException("开始时间不能大于结束时间");
         }
         getFileInfo(enrollContact);
-        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollContact.getStuEnrollId());
-        if (StringUtils.isNull(enrollBasic)) {
-            throw new RuntimeException("该考生不存在");
+        EnrollContact contact = this.selectEnrollContactByStuEnrollId(enrollContact.getContactId());
+        if (StringUtils.isNull(contact)) {
+            throw new RuntimeException("该记录不存在");
+        }
+        if (!contact.getStuEnrollId().equals(enrollContact.getStuEnrollId())) {
+            throw new RuntimeException("不能修改学生信息！！！");
         }
         enrollContact.setUpdateBy(SecurityUtils.getUsername());
         enrollContact.setUpdateTime(DateUtils.getNowDate());

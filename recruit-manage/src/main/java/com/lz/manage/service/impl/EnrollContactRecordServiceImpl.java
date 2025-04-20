@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 
@@ -16,6 +17,7 @@ import com.lz.common.utils.DateUtils;
 
 import javax.annotation.Resource;
 
+import com.lz.common.utils.bean.BeanUtils;
 import com.lz.common.utils.file.FileUtils;
 import com.lz.common.utils.uuid.IdUtils;
 import com.lz.manage.model.domain.EnrollBasic;
@@ -70,6 +72,9 @@ public class EnrollContactRecordServiceImpl extends ServiceImpl<EnrollContactRec
      */
     @Override
     public List<EnrollContactRecord> selectEnrollContactRecordList(EnrollContactRecord enrollContactRecord) {
+        if (!SecurityUtils.hasPermi("manage:enrollContactRecord:all")) {
+            enrollContactRecord.setCreateBy(SecurityUtils.getUsername());
+        }
         List<EnrollContactRecord> enrollContactRecords = enrollContactRecordMapper.selectEnrollContactRecordList(enrollContactRecord);
         for (EnrollContactRecord info : enrollContactRecords) {
             EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(info.getStuEnrollId());
@@ -95,13 +100,30 @@ public class EnrollContactRecordServiceImpl extends ServiceImpl<EnrollContactRec
         //判断是否上传了文件
         getFileInfo(enrollContactRecord);
         //查询联络是否存在
-        EnrollContact enrollContact = enrollContactService.selectEnrollContactByStuEnrollId(enrollContactRecord.getContactId());
-        if (StringUtils.isNull(enrollContact)) {
-            throw new RuntimeException("联络不存在！！！");
+//        EnrollContact enrollContact = enrollContactService.selectEnrollContactByStuEnrollId(enrollContactRecord.getContactId());
+//        if (StringUtils.isNull(enrollContact)) {
+//            throw new RuntimeException("联络不存在！！！");
+//        }
+        //判断是否已经联络
+        EnrollContactRecord one = this.getOne(new LambdaQueryWrapper<EnrollContactRecord>()
+                .eq(EnrollContactRecord::getStuEnrollId, enrollContactRecord.getStuEnrollId()));
+        if (StringUtils.isNotNull(one)) {
+            throw new RuntimeException("该考生已经联络过了！！！");
         }
-        enrollContactRecord.setCreateBy(SecurityUtils.getUsername());
+        //查询考生是否存在
+        EnrollBasic enrollBasic = enrollBasicService.selectEnrollBasicByStuEnrollId(enrollContactRecord.getStuEnrollId());
+        if (StringUtils.isNull(enrollBasic)) {
+            throw new RuntimeException("该考生不存在");
+        }
         enrollContactRecord.setRecordId(IdUtils.snowflakeId().toString());
-        enrollContactRecord.setStuEnrollId(enrollContact.getStuEnrollId());
+        enrollContactRecord.setContactId(IdUtils.snowflakeId().toString());
+        enrollContactRecord.setStuEnrollName(enrollContactRecord.getStuEnrollName());
+        EnrollContact enrollContact = new EnrollContact();
+        BeanUtils.copyProperties(enrollContactRecord,enrollContact);
+
+        enrollContactService.insertEnrollContact(enrollContact);
+        enrollContactRecord.setCreateBy(SecurityUtils.getUsername());
+//        enrollContactRecord.setStuEnrollId(enrollContact.getStuEnrollId());
         enrollContactRecord.setCreateTime(DateUtils.getNowDate());
         return enrollContactRecordMapper.insertEnrollContactRecord(enrollContactRecord);
     }
@@ -144,9 +166,17 @@ public class EnrollContactRecordServiceImpl extends ServiceImpl<EnrollContactRec
         //判断是否上传了文件
         getFileInfo(enrollContactRecord);
         //查询联络是否存在
-        EnrollContact enrollContact = enrollContactService.selectEnrollContactByStuEnrollId(enrollContactRecord.getContactId());
-        if (StringUtils.isNull(enrollContact)) {
-            throw new RuntimeException("联络不存在！！！");
+//        EnrollContact enrollContact = enrollContactService.selectEnrollContactByStuEnrollId(enrollContactRecord.getContactId());
+//        if (StringUtils.isNull(enrollContact)) {
+//            throw new RuntimeException("联络不存在！！！");
+//        }
+        //判断是否改变学生信息
+        EnrollContactRecord contactRecord = this.selectEnrollContactRecordByContactId(enrollContactRecord.getRecordId());
+        if (StringUtils.isNull(contactRecord)) {
+            throw new RuntimeException("该记录不存在！！！");
+        }
+        if (!contactRecord.getStuEnrollId().equals(enrollContactRecord.getStuEnrollId())) {
+            throw new RuntimeException("不能修改学生信息！！！");
         }
         enrollContactRecord.setUpdateBy(SecurityUtils.getUsername());
         enrollContactRecord.setUpdateTime(DateUtils.getNowDate());

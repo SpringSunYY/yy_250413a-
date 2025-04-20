@@ -240,8 +240,27 @@
     <!-- 添加或修改考生联络记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="联络ID" prop="stuEnrollId">
-          <el-input v-model="form.contactId" placeholder="请输入联络ID"/>
+<!--        <el-form-item label="联络ID" prop="stuEnrollId">-->
+<!--          <el-input v-model="form.contactId" placeholder="请输入联络ID"/>-->
+<!--        </el-form-item>-->
+        <el-form-item label="考生" prop="stuEnrollId">
+          <el-select
+            v-model="form.stuEnrollId"
+            filterable
+            remote
+            reserve-keyword
+            placeholder="请输入考生姓名"
+            :remote-method="selectEnrollInfoList"
+            :loading="enrollLoading"
+          >
+            <el-option
+              v-for="item in enrollInfoList"
+              :key="item.stuEnrollId"
+              :label="`${item.stuName}--${item.examNum}`"
+              :value="item.stuEnrollId"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="开始时间" prop="contactStartTime">
           <el-date-picker clearable
@@ -380,7 +399,14 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {}
+      rules: {
+        stuEnrollId: [
+          { required: true, message: '考生不能为空', trigger: 'blur' }
+        ],
+        answerPeopleName: [
+          { required: true, message: '接听人不能为空',trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {

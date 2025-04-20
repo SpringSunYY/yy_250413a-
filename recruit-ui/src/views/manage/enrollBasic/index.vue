@@ -750,6 +750,7 @@ import {
 } from '@/api/manage/enrollBasic'
 import { getToken } from '@/utils/auth'
 import { listEnrollPlan } from '@/api/manage/enrollPlan'
+import { checkPermi } from '@/utils/permission'
 
 export default {
   name: 'EnrollBasic',
@@ -757,6 +758,7 @@ export default {
   data() {
     return {
       //招生计划相关信息
+      isPlanQuery: false,
       planInfoList: [],
       planLoading: false,
       planQueryParams: {
@@ -942,9 +944,13 @@ export default {
   },
   created() {
     this.getList()
-    this.getPlanInfoList()
+    if (checkPermi(['manage:enrollSearch:query'])) {
+      this.isPlanQuery = true
+      this.getPlanInfoList()
+    }
   },
   methods: {
+    checkPermi,
     /**
      * 获取考生列表推荐
      * @param query

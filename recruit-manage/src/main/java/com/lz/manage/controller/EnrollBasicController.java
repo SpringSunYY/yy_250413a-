@@ -45,7 +45,7 @@ public class EnrollBasicController extends BaseController {
     /**
      * 查询录取信息列表
      */
-    @PreAuthorize("@ss.hasPermi('manage:enrollBasic:list')")
+    @PreAuthorize("@ss.hasAnyPermi('manage:enrollBasic:list,manage:enrollBasic:query')")
     @GetMapping("/list")
     public TableDataInfo list(EnrollBasicQuery enrollBasicQuery) {
         EnrollBasic enrollBasic = EnrollBasicQuery.queryToObj(enrollBasicQuery);
