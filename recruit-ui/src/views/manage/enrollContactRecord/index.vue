@@ -30,7 +30,7 @@
           <el-option
             v-for="item in enrollInfoList"
             :key="item.stuEnrollId"
-            :label="`${item.stuName}--${item.examNum}`"
+            :label="`${item.stuName}--${item.examTicketNum}`"
             :value="item.stuEnrollId"
           >
           </el-option>
@@ -256,7 +256,7 @@
             <el-option
               v-for="item in enrollInfoList"
               :key="item.stuEnrollId"
-              :label="`${item.stuName}--${item.examNum}`"
+              :label="`${item.stuName}--${item.examTicketNum}`"
               :value="item.stuEnrollId"
             >
             </el-option>
